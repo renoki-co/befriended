@@ -22,12 +22,12 @@ trait CanBlock
 
     public function isBlocking($model)
     {
-        return (bool) !is_null($this->blocking($model->getMorphClass())->find($model->getKey()));
+        return (bool) ! is_null($this->blocking($model->getMorphClass())->find($model->getKey()));
     }
 
     public function block($model)
     {
-        if($this->isBlocking($model)) {
+        if ($this->isBlocking($model)) {
             return false;
         }
 
@@ -42,7 +42,7 @@ trait CanBlock
 
     public function unblock($model)
     {
-        if(!$this->isBlocking($model)) {
+        if (! $this->isBlocking($model)) {
             return false;
         }
 

@@ -2,8 +2,8 @@
 
 namespace Rennokki\Befriended\Test;
 
-use \Rennokki\Befriended\Test\Models\User;
-use \Rennokki\Befriended\Test\Models\Page;
+use Rennokki\Befriended\Test\Models\Page;
+use Rennokki\Befriended\Test\Models\User;
 
 class BlockingTest extends TestCase
 {
@@ -87,7 +87,7 @@ class BlockingTest extends TestCase
         $this->assertEquals($this->page->blockers()->count(), 0);
         $this->assertEquals($this->page->blocking(User::class)->count(), 0);
         $this->assertEquals($this->page->blockers(User::class)->count(), 3);
-        
+
         $this->assertEquals($this->user->blocking()->count(), 0);
         $this->assertEquals($this->user->blockers()->count(), 0);
         $this->assertEquals($this->user->blocking(Page::class)->count(), 1);

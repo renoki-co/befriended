@@ -22,12 +22,12 @@ trait CanFollow
 
     public function isFollowing($model)
     {
-        return (bool) !is_null($this->following($model->getMorphClass())->find($model->getKey()));
+        return (bool) ! is_null($this->following($model->getMorphClass())->find($model->getKey()));
     }
 
     public function follow($model)
     {
-        if($this->isFollowing($model)) {
+        if ($this->isFollowing($model)) {
             return false;
         }
 
@@ -42,7 +42,7 @@ trait CanFollow
 
     public function unfollow($model)
     {
-        if(!$this->isFollowing($model)) {
+        if (! $this->isFollowing($model)) {
             return false;
         }
 

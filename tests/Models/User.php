@@ -2,15 +2,13 @@
 
 namespace Rennokki\Befriended\Test\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-use Rennokki\Befriended\Traits\CanFollow;
 use Rennokki\Befriended\Traits\CanBlock;
-use Rennokki\Befriended\Traits\CanFilterFollowers;
-use Rennokki\Befriended\Traits\CanFilterBlocking;
-
-use Rennokki\Befriended\Interfaces\Following;
+use Rennokki\Befriended\Traits\CanFollow;
 use Rennokki\Befriended\Interfaces\Blocking;
+use Rennokki\Befriended\Interfaces\Following;
+use Rennokki\Befriended\Traits\CanFilterBlocking;
+use Rennokki\Befriended\Traits\CanFilterFollowers;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements Following, Blocking
 {

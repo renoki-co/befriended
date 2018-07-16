@@ -2,8 +2,8 @@
 
 namespace Rennokki\Befriended\Test;
 
-use Rennokki\Befriended\Test\Models\Pages;
 use Rennokki\Befriended\Test\Models\User;
+use Rennokki\Befriended\Test\Models\Pages;
 use Rennokki\Befriended\Models\FollowerModel;
 use Orchestra\Testbench\TestCase as Orchestra;
 
