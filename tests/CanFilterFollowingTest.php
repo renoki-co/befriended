@@ -2,8 +2,7 @@
 
 namespace Rennokki\Befriended\Test;
 
-use \Rennokki\Befriended\Test\Models\User;
-use \Rennokki\Befriended\Test\Models\Page;
+use Rennokki\Befriended\Test\Models\Page;
 
 class CanFilterFollowingTest extends TestCase
 {
@@ -24,13 +23,13 @@ class CanFilterFollowingTest extends TestCase
 
     public function testCanFilterFollowings()
     {
-       $this->assertEquals(Page::filterFollowingsOf($this->user)->count(), 0);
-       $this->assertEquals(Page::filterFollowingsOf($this->user2)->count(), 0);
+        $this->assertEquals(Page::filterFollowingsOf($this->user)->count(), 0);
+        $this->assertEquals(Page::filterFollowingsOf($this->user2)->count(), 0);
 
-       $this->user->follow(Page::find(1));
-       $this->user->follow(Page::find(2));
+        $this->user->follow(Page::find(1));
+        $this->user->follow(Page::find(2));
 
-       $this->assertEquals(Page::filterFollowingsOf($this->user)->count(), 2);
-       $this->assertEquals(Page::filterFollowingsOf($this->user2)->count(), 0);
+        $this->assertEquals(Page::filterFollowingsOf($this->user)->count(), 2);
+        $this->assertEquals(Page::filterFollowingsOf($this->user2)->count(), 0);
     }
 }

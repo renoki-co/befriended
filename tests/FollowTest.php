@@ -2,8 +2,8 @@
 
 namespace Rennokki\Befriended\Test;
 
-use \Rennokki\Befriended\Test\Models\User;
-use \Rennokki\Befriended\Test\Models\Page;
+use Rennokki\Befriended\Test\Models\Page;
+use Rennokki\Befriended\Test\Models\User;
 
 class FollowTest extends TestCase
 {
@@ -87,7 +87,7 @@ class FollowTest extends TestCase
         $this->assertEquals($this->page->followers()->count(), 0);
         $this->assertEquals($this->page->following(User::class)->count(), 0);
         $this->assertEquals($this->page->followers(User::class)->count(), 3);
-        
+
         $this->assertEquals($this->user->following()->count(), 0);
         $this->assertEquals($this->user->followers()->count(), 0);
         $this->assertEquals($this->user->following(Page::class)->count(), 1);

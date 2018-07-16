@@ -2,8 +2,7 @@
 
 namespace Rennokki\Befriended\Test;
 
-use \Rennokki\Befriended\Test\Models\User;
-use \Rennokki\Befriended\Test\Models\Page;
+use Rennokki\Befriended\Test\Models\Page;
 
 class CanFilterBlockingTest extends TestCase
 {
@@ -24,13 +23,13 @@ class CanFilterBlockingTest extends TestCase
 
     public function testCanFilterBlockers()
     {
-       $this->assertEquals(Page::filterBlockingsOf($this->user)->count(), 10);
-       $this->assertEquals(Page::filterBlockingsOf($this->user2)->count(), 10);
+        $this->assertEquals(Page::filterBlockingsOf($this->user)->count(), 10);
+        $this->assertEquals(Page::filterBlockingsOf($this->user2)->count(), 10);
 
-       $this->user->block(Page::find(1));
-       $this->user->block(Page::find(2));
+        $this->user->block(Page::find(1));
+        $this->user->block(Page::find(2));
 
-       $this->assertEquals(Page::filterBlockingsOf($this->user)->count(), 8);
-       $this->assertEquals(Page::filterBlockingsOf($this->user2)->count(), 10);
+        $this->assertEquals(Page::filterBlockingsOf($this->user)->count(), 8);
+        $this->assertEquals(Page::filterBlockingsOf($this->user2)->count(), 10);
     }
 }
