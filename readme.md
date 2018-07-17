@@ -9,7 +9,7 @@
 [![PayPal](https://img.shields.io/badge/PayPal-donate-blue.svg)](https://paypal.me/rennokki)
 
 # Laravel Befriended
-Eloquent Befriended manages social media-like features like following or blocking and filtering content based on those lists.
+Eloquent Befriended manages social media-like features like following, blocking and filtering content based on followers or models blocked.
 
 # Installation
 Install the package:
