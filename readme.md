@@ -109,6 +109,8 @@ To check if a model is following another one, use the `isFollowing()` method:
 $user->isFollowing($friend);
 ```
 
+**Note: Following, unfollowing or checking if following models that do not correctly implement `CanBeFollowed` and `Followable` will always return `false` and such relation will not be made.**
+
 # Blocking
 Most of the functions are working like the follow feature. Here are some quick examples, since re-explaining it again would be non-sense:
 
@@ -157,6 +159,9 @@ $user->blockers(Page::class); // Pages that block this user.
 
 $user->isBlocking($page);
 ```
+
+Same as the follow feature, if you try to block, unblock or checking if the model is blocking another model will always return `false` if the `CanBeBlocked` and `Blockable` are not implemented correctly.
+
 # Filtering content
 Filtering content is what this packages makes it happen to be BE-AU-TIFUL. When querying for your results, you can use the `CanFilterFollowingModels` and `CanFilterBlockedModels` scopes.
 
