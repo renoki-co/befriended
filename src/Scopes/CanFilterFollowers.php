@@ -1,6 +1,6 @@
 <?php
 
-namespace Rennokki\Befriended\Traits;
+namespace Rennokki\Befriended\Scopes;
 
 trait CanFilterFollowers
 {
