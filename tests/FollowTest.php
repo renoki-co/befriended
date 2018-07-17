@@ -11,6 +11,7 @@ class FollowTest extends TestCase
     protected $user2;
     protected $user3;
     protected $page;
+    protected $simplePage;
 
     public function setUp()
     {
@@ -20,6 +21,7 @@ class FollowTest extends TestCase
         $this->user2 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
         $this->user3 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
         $this->page = factory(\Rennokki\Befriended\Test\Models\Page::class)->create();
+        $this->simplePage = factory(\Rennokki\Befriended\Test\Models\SimplePage::class)->create();
     }
 
     public function testNoFollowersOrFollowing()
