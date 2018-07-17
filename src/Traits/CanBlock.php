@@ -2,6 +2,9 @@
 
 namespace Rennokki\Befriended\Traits;
 
+use Rennokki\Befriended\Contracts\Blocker;
+use Rennokki\Befriended\Contracts\Blocking;
+
 trait CanBlock
 {
     public function blocking($model = null)
@@ -14,11 +17,19 @@ trait CanBlock
 
     public function isBlocking($model)
     {
+        if (! $model instanceof Blocker && ! $model instanceof Blocking) {
+            return false;
+        }
+
         return (bool) ! is_null($this->blocking($model->getMorphClass())->find($model->getKey()));
     }
 
     public function block($model)
     {
+        if (! $model instanceof Blocker && ! $model instanceof Blocking) {
+            return false;
+        }
+
         if ($this->isBlocking($model)) {
             return false;
         }
@@ -34,6 +45,10 @@ trait CanBlock
 
     public function unblock($model)
     {
+        if (! $model instanceof Blocker && ! $model instanceof Blocking) {
+            return false;
+        }
+
         if (! $this->isBlocking($model)) {
             return false;
         }
