@@ -4,7 +4,7 @@ namespace Rennokki\Befriended\Test;
 
 use Rennokki\Befriended\Test\Models\Page;
 
-class CanFilterBlockingTest extends TestCase
+class CanFilterBlockedModelsTest extends TestCase
 {
     protected $user;
     protected $user2;

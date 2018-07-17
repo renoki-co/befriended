@@ -9,12 +9,12 @@ use Rennokki\Befriended\Traits\CanBeBlocked;
 use Rennokki\Befriended\Traits\CanBeFollowed;
 use Rennokki\Befriended\Contracts\Blocking;
 use Rennokki\Befriended\Contracts\Following;
-use Rennokki\Befriended\Scopes\CanFilterBlocking;
-use Rennokki\Befriended\Scopes\CanFilterFollowers;
+use Rennokki\Befriended\Scopes\CanFilterBlockedModels;
+use Rennokki\Befriended\Scopes\CanFilterFollowingModels;
 
 class Page extends Model implements Following, Blocking
 {
-    use CanFollow, CanBeFollowed, CanBlock, CanBeBlocked, CanFilterFollowers, CanFilterBlocking;
+    use CanFollow, CanBeFollowed, CanBlock, CanBeBlocked, CanFilterFollowingModels, CanFilterBlockedModels;
 
     protected $fillable = [
         'name',

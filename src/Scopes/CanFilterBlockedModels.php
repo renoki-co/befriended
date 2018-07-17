@@ -2,7 +2,7 @@
 
 namespace Rennokki\Befriended\Scopes;
 
-trait CanFilterBlocking
+trait CanFilterBlockedModels
 {
     public function scopeFilterBlockingsOf($query, $model)
     {
