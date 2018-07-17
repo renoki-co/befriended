@@ -2,15 +2,10 @@
 
 namespace Rennokki\Befriended\Contracts;
 
-interface Following
+use Rennokki\Befriended\Contracts\Followable;
+use Rennokki\Befriended\Contracts\Follower;
+
+interface Following extends Followable, Follower
 {
-    public function followers($model = null);
-
-    public function following($model = null);
-
-    public function isFollowing($model);
-
-    public function follow($model);
-
-    public function unfollow($model);
+    //
 }
