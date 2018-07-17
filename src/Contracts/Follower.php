@@ -1,11 +1,9 @@
 <?php
 
-namespace Rennokki\Befriended\Interfaces;
+namespace Rennokki\Befriended\Contracts;
 
-interface Following
+interface Follower
 {
-    public function followers($model = null);
-
     public function following($model = null);
 
     public function isFollowing($model);

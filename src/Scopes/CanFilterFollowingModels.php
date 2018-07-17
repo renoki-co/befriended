@@ -1,8 +1,8 @@
 <?php
 
-namespace Rennokki\Befriended\Traits;
+namespace Rennokki\Befriended\Scopes;
 
-trait CanFilterFollowers
+trait CanFilterFollowingModels
 {
     public function scopeFilterFollowingsOf($query, $model)
     {

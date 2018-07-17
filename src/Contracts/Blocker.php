@@ -1,11 +1,9 @@
 <?php
 
-namespace Rennokki\Befriended\Interfaces;
+namespace Rennokki\Befriended\Contracts;
 
-interface Blocking
+interface Blocker
 {
-    public function blockers($model = null);
-
     public function blocking($model = null);
 
     public function isBlocking($model);

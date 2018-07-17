@@ -1,8 +1,8 @@
 <?php
 
-namespace Rennokki\Befriended\Traits;
+namespace Rennokki\Befriended\Scopes;
 
-trait CanFilterBlocking
+trait CanFilterBlockedModels
 {
     public function scopeFilterBlockingsOf($query, $model)
     {
