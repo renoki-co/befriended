@@ -39,7 +39,7 @@ Multiple traits have different functions for your models. There are some that al
 Following is the simple form. You can follow from the model that implements `Following` and uses `CanFollow`.
 ```php
 use Rennokki\Befriended\Traits\CanFollow;
-use Rennokki\Befriended\Interfaces\Following;
+use Rennokki\Befriended\Contracts\Following;
 
 class User extends Model implements Following {
     use CanFollow;

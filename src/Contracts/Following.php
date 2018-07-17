@@ -1,6 +1,6 @@
 <?php
 
-namespace Rennokki\Befriended\Interfaces;
+namespace Rennokki\Befriended\Contracts;
 
 interface Following
 {
