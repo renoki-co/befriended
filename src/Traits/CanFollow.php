@@ -2,6 +2,9 @@
 
 namespace Rennokki\Befriended\Traits;
 
+use Rennokki\Befriended\Contracts\Follower;
+use Rennokki\Befriended\Contracts\Following;
+
 trait CanFollow
 {
     public function following($model = null)
@@ -14,11 +17,19 @@ trait CanFollow
 
     public function isFollowing($model)
     {
+        if (! $model instanceof Follower && ! $model instanceof Following) {
+            return false;
+        }
+
         return (bool) ! is_null($this->following($model->getMorphClass())->find($model->getKey()));
     }
 
     public function follow($model)
     {
+        if (! $model instanceof Follower && ! $model instanceof Following) {
+            return false;
+        }
+
         if ($this->isFollowing($model)) {
             return false;
         }
@@ -34,6 +45,10 @@ trait CanFollow
 
     public function unfollow($model)
     {
+        if (! $model instanceof Follower && ! $model instanceof Following) {
+            return false;
+        }
+
         if (! $this->isFollowing($model)) {
             return false;
         }

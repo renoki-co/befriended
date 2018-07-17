@@ -11,6 +11,7 @@ class BlockingTest extends TestCase
     protected $user2;
     protected $user3;
     protected $page;
+    protected $simplePage;
 
     public function setUp()
     {
@@ -20,6 +21,14 @@ class BlockingTest extends TestCase
         $this->user2 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
         $this->user3 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
         $this->page = factory(\Rennokki\Befriended\Test\Models\Page::class)->create();
+        $this->simplePage = factory(\Rennokki\Befriended\Test\Models\SimplePage::class)->create();
+    }
+
+    public function testNoImplements()
+    {
+        $this->assertFalse($this->user->block($this->simplePage));
+        $this->assertFalse($this->user->unblock($this->simplePage));
+        $this->assertFalse($this->user->isBlocking($this->simplePage));
     }
 
     public function testNoBlockedOrBlocked()
