@@ -24,6 +24,13 @@ class BlockingTest extends TestCase
         $this->simplePage = factory(\Rennokki\Befriended\Test\Models\SimplePage::class)->create();
     }
 
+    public function testNoImplements()
+    {
+        $this->assertFalse($this->user->block($this->simplePage));
+        $this->assertFalse($this->user->unblock($this->simplePage));
+        $this->assertFalse($this->user->isBlocking($this->simplePage));
+    }
+
     public function testNoBlockedOrBlocked()
     {
         $this->assertEquals($this->user->blocking()->count(), 0);

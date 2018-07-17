@@ -24,6 +24,13 @@ class FollowTest extends TestCase
         $this->simplePage = factory(\Rennokki\Befriended\Test\Models\SimplePage::class)->create();
     }
 
+    public function testNoImplements()
+    {
+        $this->assertFalse($this->user->follow($this->simplePage));
+        $this->assertFalse($this->user->unfollow($this->simplePage));
+        $this->assertFalse($this->user->isFollowing($this->simplePage));
+    }
+
     public function testNoFollowersOrFollowing()
     {
         $this->assertEquals($this->user->following()->count(), 0);
