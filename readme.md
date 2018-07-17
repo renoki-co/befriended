@@ -33,56 +33,164 @@ $ php artisan migrate
 ```
 
 # Traits & Interfaces
-Multiple traits have different functions for your models. There are some that allows following or blocking other models, but there are traits that permit filtering content based on another model's following list or blocking list.
+Multiple traits have different functions for your models. There are some that allows following or blocking other models, or allowing to be followed or blocked. There are traits that permit filtering content based on another model's following list or blocking list.
 
-# Following
-Following is the simple form. You can follow from the model that implements `Following` and uses `CanFollow`.
+# Following & Followers
+Each model can have `followers`, a list of models that can follow, and `following`, a list of models that is currently following. Both methods are separated into two traits, that need to implement two interfaces.
+
+To allow a model to follow, you can use the `CanFollow` trait and `Follower` interface.
 ```php
 use Rennokki\Befriended\Traits\CanFollow;
-use Rennokki\Befriended\Contracts\Following;
+use Rennokki\Befriended\Contracts\Follower;
 
-class User extends Model implements Following {
+class User extends Model implements Follower {
     use CanFollow;
     ...
 }
 ```
 
-From now on, you can follow other models.
+In order to allow a model to be followed, you must add `CanBeFollowed` trait and `Followable` interface.
 ```php
-$friend = User::where('name', 'John')->first();
-$user->follow($friend);
+use Rennokki\Befriended\Traits\CanBeFollowed;
+use Rennokki\Befriended\Contracts\Followable;
+
+class User extends Model implements Followable {
+    use CanBeFollowed;
+    ...
+}
+```
+
+If you plan to set your model as being able to both be followed or follow, use the trait and interface named `Following`:
+```php
+use Rennokki\Befriended\Traits\Following as FollowingTrait;
+use Rennokki\Befriended\Contracts\Following as FollowingContract;
+
+class User extends Model implements FollowingContract {
+    use FollowingTrait;
+    ...
+}
+```
+
+# Real-world example
+Let's suppose we have an `User` model which can follow and be followed. On it, we can now check for followers or follow new users:
+```php
+$zuck = User::where('name', 'Mark Zuckerberg')->first();
+$user->follow($zuck);
 
 $user->following()->count(); // 1
-$friend->followers()->count(); // 1
+$zuck->followers()->count(); // 1
 ```
 
-In case you want to follow other models, keep in mind that using `following()` or `followers()` relationships doesn't work unless you pass the class you wish to retrieve from.
+# Following other models
+Let's suppose we have a `Page` model, than can only be followed:
 ```php
-$post = Post::find(1);
-$user->follow($post);
+use Rennokki\Befriended\Traits\CanBeFollowed;
+use Rennokki\Befriended\Contracts\Followable;
 
-// Because $user is User class, it does not follow
-// any User class.
-$user->following()->count(); // 0
-
-// Instead, it follows a Post class.
-$user->following(Post::class)->count(); // 1
+class Page extends Model implements Followable {
+    use CanBeFollowed;
+    ...
+}
 ```
 
-Passing the class as argument for `followers()` relationship works like the `following()`.
-
+Following other models needs a bit of attention. By default, if querying `following()` and `followers()` from the `$user`, the functions will return only `User` instances. If you plan to retrieve other instances, such as `Page`, you can use it as an argument to the relationships:
 ```php
-$user->unfollow($friend);
-$user->following()->count(); // 0
+$zuckPage = Page::where('username', 'zuck')->first();
+
+$user->follow($zuckPage);
+$user->following()->count(); // 0, because it doesn't follow any User instance
+$user->following(Page::class)->count(); // 1, because it follows only Zuck's page.
 ```
 
-Alternatively, you can check if a model is following:
+**Note: The previous example on passing a class as an argument to `following()` relationship also works with `followers()`.**
+
+To check if a model is following another one, use the `isFollowing()` method:
 ```php
 $user->isFollowing($friend);
 ```
 
 # Blocking
-# WIP
+Most of the functions are working like the follow feature. Here are some quick examples, since re-explaining it again would be non-sense:
 
+To allow a model to block other models, you can use the `CanBlock` trait and `Blocker` interface.
+```php
+use Rennokki\Befriended\Traits\CanBlock;
+use Rennokki\Befriended\Contracts\Blocker;
+
+class User extends Model implements Blocker {
+    use CanBlock;
+    ...
+}
+```
+
+Adding `CanBeBlocked` trait and `Blockable` interface sets the model able to be blocked.
+```php
+use Rennokki\Befriended\Traits\CanBeBlocked;
+use Rennokki\Befriended\Contracts\Blockable;
+
+class User extends Model implements Blockable {
+    use CanBeBlocked;
+    ...
+}
+```
+
+Using both? You should be using `Blocking` trait & interface:
+```php
+use Rennokki\Befriended\Traits\Blocking as BlockingTrait;
+use Rennokki\Befriended\Contracts\Blocking as BlockingContract;
+
+class User extends Model implements BlockingContract {
+    use BlockingTrait;
+    ...
+}
+```
+
+The following methods are doing like the follow feature, but just for the blocking system:
+```php
+$user->block($user);
+$user->unblock($user);
+
+$user->blockings(); // Users that this user blocks.
+$user->blockings(Page::class); // Pages that this user blocks.
+$user->blockers(); // Users that block this user.
+$user->blockers(Page::class); // Pages that block this user.
+
+$user->isBlocking($page);
+```
 # Filtering content
-# WIP
+Filtering content is what this packages makes it happen to be BE-AU-TIFUL. When querying for your results, you can use the `CanFilterFollowingModels` and `CanFilterBlockedModels` scopes.
+
+```php
+use Rennokki\Befriended\Traits\Following as FollowingTrait;
+use Rennokki\Befriended\Contracts\Following as FollowingContract;
+
+use Rennokki\Befriended\Scopes\CanFilterFollowingModels;
+use Rennokki\Befriended\Scopes\CanFilterBlockedModels;
+
+class User extends Model implements FollowingContract {
+    use FollowingTrait, CanFilterFollowingModels, CanFilterBlockedModels;
+    ...
+}
+```
+
+You can query models based on blockings:
+```php
+$bob = User::where('username', 'john')->first();
+$alice = User::where('username', 'alice')->first();
+
+User::filterBlockingsOf($bob)->get(); // You will get Alice and Bob as results.
+
+$bob->block($alice);
+User::filterBlockingsOf($bob)->get(); // You will get only Bob as result.
+```
+
+You can query models based on followings:
+```php
+$bob = User::where('username', 'john')->first();
+$alice = User::where('username', 'alice')->first();
+
+User::filterFollowingsOf($bob)->get(); // You will get no results.
+
+$bob->follow($alice);
+User::filterBlockingsOf($bob)->get(); // You will get Alice as result.
+```
