@@ -1,6 +1,6 @@
 {
     "name": "rennokki/befriended",
-    "description": "Eloquent Befriended manages social media-like features like following or blocking and filtering content based on those lists.",
+    "description": "Eloquent Befriended manages social media-like features like following, blocking and filtering content based on followers or models blocked.",
     "keywords": [
         "eloquent",
         "laravel",
@@ -11,7 +11,12 @@
         "friends",
         "connection",
         "connections",
-        "link"
+        "link",
+        "social",
+        "media",
+        "block",
+        "blocking",
+        "blocker"
     ],
     "homepage": "https://github.com/rennokki/befriended",
     "license": "MIT",
