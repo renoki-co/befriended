@@ -60,13 +60,13 @@ class User extends Model implements Followable {
 }
 ```
 
-If you plan to set your model as being able to both be followed or follow, use the trait and interface named `Following`:
+If you plan to set your model as being able to both be followed or follow, use the `Follow` trait and `Following` interface:
 ```php
-use Rennokki\Befriended\Traits\Following as FollowingTrait;
-use Rennokki\Befriended\Contracts\Following as FollowingContract;
+use Rennokki\Befriended\Traits\Follow;
+use Rennokki\Befriended\Contracts\Following;
 
-class User extends Model implements FollowingContract {
-    use FollowingTrait;
+class User extends Model implements Following {
+    use Follow;
     ...
 }
 ```
@@ -136,13 +136,13 @@ class User extends Model implements Blockable {
 }
 ```
 
-Using both? You should be using `Blocking` trait & interface:
+Using both? You should be using `Block` trait & `Blocking` interface:
 ```php
-use Rennokki\Befriended\Traits\Blocking as BlockingTrait;
-use Rennokki\Befriended\Contracts\Blocking as BlockingContract;
+use Rennokki\Befriended\Traits\Block;
+use Rennokki\Befriended\Contracts\Blocking;
 
-class User extends Model implements BlockingContract {
-    use BlockingTrait;
+class User extends Model implements Blocking {
+    use Block;
     ...
 }
 ```
@@ -213,14 +213,14 @@ $user->isLiking($page);
 Filtering content is what this packages makes it happen to be BE-AU-TIFUL. When querying for your results, you can use the `CanFilterFollowingModels` and `CanFilterBlockedModels` scopes.
 
 ```php
-use Rennokki\Befriended\Traits\Following as FollowingTrait;
-use Rennokki\Befriended\Contracts\Following as FollowingContract;
+use Rennokki\Befriended\Traits\Follow;
+use Rennokki\Befriended\Contracts\Following;
 
 use Rennokki\Befriended\Scopes\CanFilterFollowingModels;
 use Rennokki\Befriended\Scopes\CanFilterBlockedModels;
 
-class User extends Model implements FollowingContract {
-    use FollowingTrait, CanFilterFollowingModels, CanFilterBlockedModels;
+class User extends Model implements Following {
+    use Follow, CanFilterFollowingModels, CanFilterBlockedModels;
     ...
 }
 ```
