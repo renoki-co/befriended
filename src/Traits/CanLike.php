@@ -49,7 +49,7 @@ trait CanLike
             return false;
         }
 
-        if (! $this->isLinking($model)) {
+        if (! $this->isLiking($model)) {
             return false;
         }
 
