@@ -162,6 +162,53 @@ $user->isBlocking($page);
 
 Same as the follow feature, if you try to block, unblock or checking if the model is blocking another model will always return `false` if the `CanBeBlocked` and `Blockable` are not implemented correctly.
 
+# Liking
+For models that can like other models:
+```php
+use Rennokki\Befriended\Traits\CanLike;
+use Rennokki\Befriended\Contracts\Liker;
+
+class User extends Model implements Liker {
+    use CanLike;
+    ...
+}
+```
+
+For models that can be liked:
+```php
+use Rennokki\Befriended\Traits\CanBeLiked;
+use Rennokki\Befriended\Contracts\Likeable;
+
+class Page extends Model implements Likeable {
+    use CanBeLiked;
+    ...
+}
+```
+
+For both liking & being liked:
+```php
+use Rennokki\Befriended\Traits\Like;
+use Rennokki\Befriended\Contracts\Liking;
+
+class User extends Model implements Liking {
+    use Like;
+    ...
+}
+```
+
+You can use the following methods:
+```php
+$user->like($page);
+$user->unlike($page);
+
+$user->likings(); // Users that this user likes.
+$user->likings(Page::class); // Pages that this user likes.
+$user->likers(); // Users that like this user.
+$user->likers(Page::class); // Pages that like this user.
+
+$user->isLiking($page);
+```
+
 # Filtering content
 Filtering content is what this packages makes it happen to be BE-AU-TIFUL. When querying for your results, you can use the `CanFilterFollowingModels` and `CanFilterBlockedModels` scopes.
 
