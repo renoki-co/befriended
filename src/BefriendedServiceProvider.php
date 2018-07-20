@@ -19,6 +19,8 @@ class BefriendedServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../database/migrations/2018_07_14_183253_followers.php' => database_path('migrations/2018_07_14_183253_followers.php'),
+            __DIR__.'/../database/migrations/2019_07_14_183254_blockers.php' => database_path('migrations/2019_07_14_183254_blockers.php'),
+            __DIR__.'/../database/migrations/2019_07_14_183255_blockers.php' => database_path('migrations/2019_07_14_183254_blockers.php'),
         ], 'migration');
     }
 
