@@ -10,5 +10,5 @@ interface Liker
 
     public function like($model);
 
-    public function unlinke($model);
+    public function unlike($model);
 }
