@@ -43,7 +43,7 @@ trait CanLike
         return true;
     }
 
-    public function unlink($model)
+    public function unlike($model)
     {
         if (! $model instanceof Liker && ! $model instanceof Liking) {
             return false;
