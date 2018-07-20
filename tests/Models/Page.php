@@ -9,12 +9,13 @@ use Rennokki\Befriended\Traits\CanFollow;
 use Rennokki\Befriended\Traits\CanBeLiked;
 use Rennokki\Befriended\Contracts\Blocking;
 use Rennokki\Befriended\Contracts\Following;
+use Rennokki\Befriended\Contracts\Liking;
 use Rennokki\Befriended\Traits\CanBeBlocked;
 use Rennokki\Befriended\Traits\CanBeFollowed;
 use Rennokki\Befriended\Scopes\CanFilterBlockedModels;
 use Rennokki\Befriended\Scopes\CanFilterFollowingModels;
 
-class Page extends Model implements Following, Blocking
+class Page extends Model implements Following, Blocking, Liking
 {
     use CanFollow, CanBeFollowed, CanBlock, CanBeBlocked, CanLike, CanBeLiked, CanFilterFollowingModels, CanFilterBlockedModels;
 
