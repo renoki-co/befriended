@@ -5,6 +5,7 @@ namespace Rennokki\Befriended\Test;
 use Rennokki\Befriended\Test\Models\User;
 use Rennokki\Befriended\Test\Models\Pages;
 use Rennokki\Befriended\Models\FollowerModel;
+use Rennokki\Befriended\Models\BlockerModel;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -42,6 +43,7 @@ abstract class TestCase extends Orchestra
         $app['config']->set('auth.providers.pages.model', Page::class);
         $app['config']->set('app.key', 'wslxrEFGWY6GfGhvN9L3wH3KSRJQQpBD');
         $app['config']->set('befriended.models.follower', FollowerModel::class);
+        $app['config']->set('befriended.models.blocker', BlockerModel::class);
     }
 
     protected function resetDatabase()
