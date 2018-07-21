@@ -107,6 +107,8 @@ $user->follows($friend); // alias
 
 ### Filtering followed/unfollowed models
 You can filter your queries using scopes provided by this package to filter followed models, if you plan, for example, to create a news feed, or if your user wants to find new people, you can filter the unfollowed models.
+Make sure your model uses the `Rennokki\Befriended\Scopes\CanFilterFollowingModels` trait for filtering following models and/or `Rennokki\Befriended\Scopes\CanFilterUnfollowedModels` for filtering unfollowed models.
+
 ```php
 $bob = User::where('username', 'john')->first();
 $alice = User::where('username', 'alice')->first();
@@ -171,6 +173,8 @@ $user->blocks($page); // alias to isBlocking
 
 ### Filtering blocked models
 Blocking scopes provided takes away from the query the models that are blocked. Useful to stop showing content when someone blocks people.
+Make sure your model uses the `Rennokki\Befriended\Scopes\CanFilterBlockedModels` trait.
+
 ```php
 $bob = User::where('username', 'john')->first();
 $alice = User::where('username', 'alice')->first();
@@ -228,4 +232,19 @@ $user->likers(Page::class); // Pages that like this user.
 
 $user->isLiking($page);
 $user->likes($page); // alias to isLiking
+```
+
+### Filtering liked content
+Filtering liked content can make showing content easier. For example, showing in the news feed posts that weren't liked by an user can be helpful.
+The model you're querying from must use the `Rennokki\Befriended\Scopes\CanFilterUnlikedModels` trait.
+
+Let's suppose there are 10 pages in the database.
+```php
+$bob = User::where('username', 'john')->first();
+$page = Page::find(1);
+
+Page::filterUnlikedFor($bob)->get(); // You will get 10 results.
+
+$bob->like($page);
+Page::filterUnlikedFor($bob)->get(); // You will get only 9 results.
 ```
