@@ -49,13 +49,17 @@ class LikingTest extends TestCase
 
         $this->assertFalse($this->user->like($this->user2));
         $this->assertTrue($this->user->isLiking($this->user2));
+        $this->assertTrue($this->user->likes($this->user2));
 
         $this->assertTrue($this->user2->like($this->user3));
         $this->assertFalse($this->user2->like($this->user3));
         $this->assertTrue($this->user2->isLiking($this->user3));
+        $this->assertTrue($this->user2->likes($this->user3));
 
         $this->assertFalse($this->user->isLiking($this->user3));
         $this->assertFalse($this->user3->isLiking($this->user2));
+        $this->assertFalse($this->user->likes($this->user3));
+        $this->assertFalse($this->user3->likes($this->user2));
 
         $this->assertEquals($this->user->liking()->count(), 1);
         $this->assertEquals($this->user->likers()->count(), 0);
@@ -72,6 +76,7 @@ class LikingTest extends TestCase
         $this->assertTrue($this->user->like($this->user2));
         $this->assertTrue($this->user->unlike($this->user2));
         $this->assertFalse($this->user->isLiking($this->user2));
+        $this->assertFalse($this->user->likes($this->user2));
 
         $this->assertEquals($this->user->liking()->count(), 0);
         $this->assertEquals($this->user->likers()->count(), 0);
@@ -84,6 +89,7 @@ class LikingTest extends TestCase
         $this->assertTrue($this->user->like($this->page));
         $this->assertFalse($this->user->like($this->page));
         $this->assertTrue($this->user->isLiking($this->page));
+        $this->assertTrue($this->user->likes($this->page));
 
         $this->assertTrue($this->user2->like($this->page));
         $this->assertTrue($this->user3->like($this->page));
@@ -91,6 +97,9 @@ class LikingTest extends TestCase
         $this->assertFalse($this->page->isLiking($this->user));
         $this->assertFalse($this->page->isLiking($this->user2));
         $this->assertFalse($this->page->isLiking($this->user3));
+        $this->assertFalse($this->page->likes($this->user));
+        $this->assertFalse($this->page->likes($this->user2));
+        $this->assertFalse($this->page->likes($this->user3));
 
         $this->assertEquals($this->page->liking()->count(), 0);
         $this->assertEquals($this->page->likers()->count(), 0);
@@ -120,6 +129,7 @@ class LikingTest extends TestCase
         $this->assertTrue($this->user->like($this->page));
         $this->assertTrue($this->user->unlike($this->page));
         $this->assertFalse($this->user->isLiking($this->page));
+        $this->assertFalse($this->user->likes($this->page));
 
         $this->assertEquals($this->user->liking()->count(), 0);
         $this->assertEquals($this->user->likers()->count(), 0);

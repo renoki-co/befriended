@@ -29,6 +29,7 @@ class BlockingTest extends TestCase
         $this->assertFalse($this->user->block($this->simplePage));
         $this->assertFalse($this->user->unblock($this->simplePage));
         $this->assertFalse($this->user->isBlocking($this->simplePage));
+        $this->assertFalse($this->user->blocks($this->simplePage));
     }
 
     public function testNoBlockedOrBlocked()
@@ -49,13 +50,17 @@ class BlockingTest extends TestCase
 
         $this->assertFalse($this->user->block($this->user2));
         $this->assertTrue($this->user->isBlocking($this->user2));
+        $this->assertTrue($this->user->blocks($this->user2));
 
         $this->assertTrue($this->user2->block($this->user3));
         $this->assertFalse($this->user2->block($this->user3));
         $this->assertTrue($this->user2->isBlocking($this->user3));
+        $this->assertTrue($this->user2->blocks($this->user3));
 
         $this->assertFalse($this->user->isBlocking($this->user3));
         $this->assertFalse($this->user3->isBlocking($this->user2));
+        $this->assertFalse($this->user->block($this->user3));
+        $this->assertFalse($this->user3->block($this->user2));
 
         $this->assertEquals($this->user->blocking()->count(), 1);
         $this->assertEquals($this->user->blockers()->count(), 0);
@@ -72,6 +77,7 @@ class BlockingTest extends TestCase
         $this->assertTrue($this->user->block($this->user2));
         $this->assertTrue($this->user->unblock($this->user2));
         $this->assertFalse($this->user->isBlocking($this->user2));
+        $this->assertFalse($this->user->blocks($this->user2));
 
         $this->assertEquals($this->user->blocking()->count(), 0);
         $this->assertEquals($this->user->blockers()->count(), 0);
@@ -84,6 +90,7 @@ class BlockingTest extends TestCase
         $this->assertTrue($this->user->block($this->page));
         $this->assertFalse($this->user->block($this->page));
         $this->assertTrue($this->user->isBlocking($this->page));
+        $this->assertTrue($this->user->blocks($this->page));
 
         $this->assertTrue($this->user2->block($this->page));
         $this->assertTrue($this->user3->block($this->page));
@@ -91,6 +98,9 @@ class BlockingTest extends TestCase
         $this->assertFalse($this->page->isBlocking($this->user));
         $this->assertFalse($this->page->isBlocking($this->user2));
         $this->assertFalse($this->page->isBlocking($this->user3));
+        $this->assertFalse($this->page->blocks($this->user));
+        $this->assertFalse($this->page->blocks($this->user2));
+        $this->assertFalse($this->page->blocks($this->user3));
 
         $this->assertEquals($this->page->blocking()->count(), 0);
         $this->assertEquals($this->page->blockers()->count(), 0);
@@ -120,6 +130,7 @@ class BlockingTest extends TestCase
         $this->assertTrue($this->user->block($this->page));
         $this->assertTrue($this->user->unblock($this->page));
         $this->assertFalse($this->user->isBlocking($this->page));
+        $this->assertFalse($this->user->blocks($this->page));
 
         $this->assertEquals($this->user->blocking()->count(), 0);
         $this->assertEquals($this->user->blockers()->count(), 0);
