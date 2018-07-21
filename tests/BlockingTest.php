@@ -59,8 +59,8 @@ class BlockingTest extends TestCase
 
         $this->assertFalse($this->user->isBlocking($this->user3));
         $this->assertFalse($this->user3->isBlocking($this->user2));
-        $this->assertFalse($this->user->block($this->user3));
-        $this->assertFalse($this->user3->block($this->user2));
+        $this->assertFalse($this->user->blocks($this->user3));
+        $this->assertFalse($this->user3->blocks($this->user2));
 
         $this->assertEquals($this->user->blocking()->count(), 1);
         $this->assertEquals($this->user->blockers()->count(), 0);
