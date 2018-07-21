@@ -217,12 +217,26 @@ use Rennokki\Befriended\Traits\Follow;
 use Rennokki\Befriended\Contracts\Following;
 
 use Rennokki\Befriended\Scopes\CanFilterFollowingModels;
+use Rennokki\Befriended\Scopes\CanFilterUnfollowedModels;
 use Rennokki\Befriended\Scopes\CanFilterBlockedModels;
 
 class User extends Model implements Following {
-    use Follow, CanFilterFollowingModels, CanFilterBlockedModels;
+    use Follow, CanFilterFollowingModels, CanFilterBlockedModel,
+        CanFilterUnfollowedModels;
     ...
 }
+```
+
+You can query models based on followings or filter nonfollowed models:
+```php
+$bob = User::where('username', 'john')->first();
+$alice = User::where('username', 'alice')->first();
+
+User::filterFollowingsOf($bob)->get(); // You will get no results.
+User::filterUnfollowingsOf($bob)->get(); // You will get Alice.
+
+$bob->follow($alice);
+User::filterFollowingsOf($bob)->get(); // You will get Alice as result.
 ```
 
 You can query models based on blockings:
@@ -234,15 +248,4 @@ User::filterBlockingsOf($bob)->get(); // You will get Alice and Bob as results.
 
 $bob->block($alice);
 User::filterBlockingsOf($bob)->get(); // You will get only Bob as result.
-```
-
-You can query models based on followings:
-```php
-$bob = User::where('username', 'john')->first();
-$alice = User::where('username', 'alice')->first();
-
-User::filterFollowingsOf($bob)->get(); // You will get no results.
-
-$bob->follow($alice);
-User::filterBlockingsOf($bob)->get(); // You will get Alice as result.
 ```
