@@ -7,6 +7,12 @@ use Rennokki\Befriended\Contracts\Following;
 
 trait CanFollow
 {
+    /**
+     * Relationship for models that this model is currently following.
+     *
+     * @param Model $model The model types of the results.
+     * @return morphToMany The relationship.
+     */
     public function following($model = null)
     {
         return $this->morphToMany(($model) ?: $this->getMorphClass(), 'follower', 'followers', 'follower_id', 'followable_id')
@@ -15,6 +21,12 @@ trait CanFollow
                     ->wherePivot('follower_type', $this->getMorphClass());
     }
 
+    /**
+     * Check if the current model is following another model.
+     *
+     * @param Model $model The model which will be checked against.
+     * @return bool
+     */
     public function isFollowing($model)
     {
         if (! $model instanceof Follower && ! $model instanceof Following) {
@@ -24,11 +36,23 @@ trait CanFollow
         return (bool) ! is_null($this->following($model->getMorphClass())->find($model->getKey()));
     }
 
+    /**
+     * Check if the current model is following another model.
+     *
+     * @param Model $model The model which will be checked against.
+     * @return bool
+     */
     public function follows($model)
     {
         return $this->isFollowing($model);
     }
 
+    /**
+     * Follow a certain model.
+     *
+     * @param Model $model The model which will be followed.
+     * @return bool
+     */
     public function follow($model)
     {
         if (! $model instanceof Follower && ! $model instanceof Following) {
@@ -48,6 +72,12 @@ trait CanFollow
         return true;
     }
 
+    /**
+     * Unfollow a certain model.
+     *
+     * @param Model $model The model which will be unfollowed.
+     * @return bool
+     */
     public function unfollow($model)
     {
         if (! $model instanceof Follower && ! $model instanceof Following) {

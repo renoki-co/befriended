@@ -7,6 +7,12 @@ use Rennokki\Befriended\Contracts\Liking;
 
 trait CanLike
 {
+    /**
+     * Relationship for models that this model is currently liking.
+     *
+     * @param Model $model The model types of the results.
+     * @return morphToMany The relationship.
+     */
     public function liking($model = null)
     {
         return $this->morphToMany(($model) ?: $this->getMorphClass(), 'liker', 'likers', 'liker_id', 'likeable_id')
@@ -15,6 +21,12 @@ trait CanLike
                     ->wherePivot('liker_type', $this->getMorphClass());
     }
 
+    /**
+     * Check if the current model is liking another model.
+     *
+     * @param Model $model The model which will be checked against.
+     * @return bool
+     */
     public function isLiking($model)
     {
         if (! $model instanceof Liker && ! $model instanceof Liking) {
@@ -24,11 +36,23 @@ trait CanLike
         return (bool) ! is_null($this->liking($model->getMorphClass())->find($model->getKey()));
     }
 
+    /**
+     * Check if the current model is liking another model.
+     *
+     * @param Model $model The model which will be checked against.
+     * @return bool
+     */
     public function likes($model)
     {
         return $this->isLiking($model);
     }
 
+    /**
+     * Like a certain model.
+     *
+     * @param Model $model The model which will be liked.
+     * @return bool
+     */
     public function like($model)
     {
         if (! $model instanceof Liker && ! $model instanceof Liking) {
@@ -48,6 +72,12 @@ trait CanLike
         return true;
     }
 
+    /**
+     * Unlike a certain model.
+     *
+     * @param Model $model The model which will be unliked.
+     * @return bool
+     */
     public function unlike($model)
     {
         if (! $model instanceof Liker && ! $model instanceof Liking) {
