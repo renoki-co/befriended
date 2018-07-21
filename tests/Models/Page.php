@@ -12,8 +12,8 @@ use Rennokki\Befriended\Contracts\Blocking;
 use Rennokki\Befriended\Contracts\Following;
 use Rennokki\Befriended\Traits\CanBeBlocked;
 use Rennokki\Befriended\Traits\CanBeFollowed;
-use Rennokki\Befriended\Scopes\CanFilterUnlikedModels;
 use Rennokki\Befriended\Scopes\CanFilterBlockedModels;
+use Rennokki\Befriended\Scopes\CanFilterUnlikedModels;
 use Rennokki\Befriended\Scopes\CanFilterFollowingModels;
 use Rennokki\Befriended\Scopes\CanFilterUnfollowedModels;
 
