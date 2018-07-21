@@ -14,10 +14,12 @@ use Rennokki\Befriended\Traits\CanBeBlocked;
 use Rennokki\Befriended\Traits\CanBeFollowed;
 use Rennokki\Befriended\Scopes\CanFilterBlockedModels;
 use Rennokki\Befriended\Scopes\CanFilterFollowingModels;
+use Rennokki\Befriended\Scopes\CanFilterNonFollowingModels;
 
 class Page extends Model implements Following, Blocking, Liking
 {
-    use CanFollow, CanBeFollowed, CanBlock, CanBeBlocked, CanLike, CanBeLiked, CanFilterFollowingModels, CanFilterBlockedModels;
+    use CanFollow, CanBeFollowed, CanBlock, CanBeBlocked, CanLike, CanBeLiked, CanFilterFollowingModels, CanFilterBlockedModels,
+        CanFilterNonFollowingModels;
 
     protected $fillable = [
         'name',
