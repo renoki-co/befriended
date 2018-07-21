@@ -2,7 +2,7 @@
 
 namespace Rennokki\Befriended\Scopes;
 
-trait CanFilterLikedModels
+trait CanFilterUnlikedModels
 {
     public function scopeFilterUnlikedFor($query, $model)
     {

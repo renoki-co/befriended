@@ -12,7 +12,7 @@ use Rennokki\Befriended\Contracts\Blocking;
 use Rennokki\Befriended\Contracts\Following;
 use Rennokki\Befriended\Traits\CanBeBlocked;
 use Rennokki\Befriended\Traits\CanBeFollowed;
-use Rennokki\Befriended\Scopes\CanFilterLikedModels;
+use Rennokki\Befriended\Scopes\CanFilterUnlikedModels;
 use Rennokki\Befriended\Scopes\CanFilterBlockedModels;
 use Rennokki\Befriended\Scopes\CanFilterFollowingModels;
 use Rennokki\Befriended\Scopes\CanFilterUnfollowedModels;
@@ -20,7 +20,7 @@ use Rennokki\Befriended\Scopes\CanFilterUnfollowedModels;
 class Page extends Model implements Following, Blocking, Liking
 {
     use CanFollow, CanBeFollowed, CanBlock, CanBeBlocked, CanLike, CanBeLiked, CanFilterFollowingModels, CanFilterBlockedModels,
-        CanFilterUnfollowedModels, CanFilterLikedModels;
+        CanFilterUnfollowedModels, CanFilterUnlikedModels;
 
     protected $fillable = [
         'name',
