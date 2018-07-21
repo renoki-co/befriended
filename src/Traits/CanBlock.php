@@ -7,6 +7,12 @@ use Rennokki\Befriended\Contracts\Blocking;
 
 trait CanBlock
 {
+    /**
+     * Relationship for models that this model is currently blocking.
+     *
+     * @param Model $model The model types of the results.
+     * @return morphToMany The relationship.
+     */
     public function blocking($model = null)
     {
         return $this->morphToMany(($model) ?: $this->getMorphClass(), 'blocker', 'blockers', 'blocker_id', 'blockable_id')
@@ -15,6 +21,12 @@ trait CanBlock
                     ->wherePivot('blocker_type', $this->getMorphClass());
     }
 
+    /**
+     * Check if the current model is blocking another model.
+     *
+     * @param Model $model The model which will be checked against.
+     * @return bool
+     */
     public function isBlocking($model)
     {
         if (! $model instanceof Blocker && ! $model instanceof Blocking) {
@@ -24,11 +36,23 @@ trait CanBlock
         return (bool) ! is_null($this->blocking($model->getMorphClass())->find($model->getKey()));
     }
 
+    /**
+     * Check if the current model is blocking another model.
+     *
+     * @param Model $model The model which will be checked against.
+     * @return bool
+     */
     public function blocks($model)
     {
         return $this->isBlocking($model);
     }
 
+    /**
+     * Block a certain model.
+     *
+     * @param Model $model The model which will be blocked.
+     * @return bool
+     */
     public function block($model)
     {
         if (! $model instanceof Blocker && ! $model instanceof Blocking) {
@@ -48,6 +72,12 @@ trait CanBlock
         return true;
     }
 
+    /**
+     * Unblock a certain model.
+     *
+     * @param Model $model The model which will be unblocked.
+     * @return bool
+     */
     public function unblock($model)
     {
         if (! $model instanceof Blocker && ! $model instanceof Blocking) {
