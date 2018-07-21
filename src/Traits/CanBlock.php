@@ -24,6 +24,11 @@ trait CanBlock
         return (bool) ! is_null($this->blocking($model->getMorphClass())->find($model->getKey()));
     }
 
+    public function blocks($model)
+    {
+        return $this->isBlocking($model);
+    }
+
     public function block($model)
     {
         if (! $model instanceof Blocker && ! $model instanceof Blocking) {

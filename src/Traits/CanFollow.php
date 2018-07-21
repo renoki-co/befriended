@@ -24,6 +24,11 @@ trait CanFollow
         return (bool) ! is_null($this->following($model->getMorphClass())->find($model->getKey()));
     }
 
+    public function follows($model)
+    {
+        return $this->isFollowing($model);
+    }
+
     public function follow($model)
     {
         if (! $model instanceof Follower && ! $model instanceof Following) {

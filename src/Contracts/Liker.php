@@ -8,6 +8,8 @@ interface Liker
 
     public function isLiking($model);
 
+    public function likes($model);
+
     public function like($model);
 
     public function unlike($model);

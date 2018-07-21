@@ -8,6 +8,8 @@ interface Blocker
 
     public function isBlocking($model);
 
+    public function blocks($model);
+
     public function block($model);
 
     public function unblock($model);
