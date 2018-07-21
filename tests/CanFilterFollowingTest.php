@@ -35,13 +35,13 @@ class CanFilterFollowingTest extends TestCase
 
     public function testCanFilterNonFollowings()
     {
-        $this->assertEquals(Page::filterUnfollowingsOf($this->user)->count(), 0);
-        $this->assertEquals(Page::filterUnfollowingsOf($this->user2)->count(), 0);
+        $this->assertEquals(Page::filterUnfollowingsOf($this->user)->count(), 10);
+        $this->assertEquals(Page::filterUnfollowingsOf($this->user2)->count(), 10);
 
         $this->user->follow(Page::find(1));
         $this->user->follow(Page::find(2));
 
         $this->assertEquals(Page::filterUnfollowingsOf($this->user)->count(), 8);
-        $this->assertEquals(Page::filterUnfollowingsOf($this->user2)->count(), 0);
+        $this->assertEquals(Page::filterUnfollowingsOf($this->user2)->count(), 10);
     }
 }
