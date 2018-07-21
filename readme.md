@@ -100,6 +100,7 @@ $user->following(Page::class)->count(); // 1, because it follows only Zuck's pag
 On-demand, you can check if your model follows some other model:
 ```php
 $user->isFollowing($friend);
+$user->follows($friend); // alias
 ```
 
 **Note: Following, unfollowing or checking if following models that do not correctly implement `CanBeFollowed` and `Followable` will always return `false` and such relation will never be made.**
@@ -165,6 +166,7 @@ $user->blockers(); // Users that block this user.
 $user->blockers(Page::class); // Pages that block this user.
 
 $user->isBlocking($page);
+$user->blocks($page); // alias to isBlocking
 ```
 
 ### Filtering blocked models
@@ -225,4 +227,5 @@ $user->likers(); // Users that like this user.
 $user->likers(Page::class); // Pages that like this user.
 
 $user->isLiking($page);
+$user->likes($page); // alias to isLiking
 ```
