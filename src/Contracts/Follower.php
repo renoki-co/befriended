@@ -8,6 +8,8 @@ interface Follower
 
     public function isFollowing($model);
 
+    public function follows($model);
+
     public function follow($model);
 
     public function unfollow($model);

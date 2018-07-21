@@ -29,6 +29,7 @@ class FollowTest extends TestCase
         $this->assertFalse($this->user->follow($this->simplePage));
         $this->assertFalse($this->user->unfollow($this->simplePage));
         $this->assertFalse($this->user->isFollowing($this->simplePage));
+        $this->assertFalse($this->user->follows($this->simplePage));
     }
 
     public function testNoFollowersOrFollowing()
@@ -49,13 +50,17 @@ class FollowTest extends TestCase
 
         $this->assertFalse($this->user->follow($this->user2));
         $this->assertTrue($this->user->isFollowing($this->user2));
+        $this->assertTrue($this->user->follows($this->user2));
 
         $this->assertTrue($this->user2->follow($this->user3));
         $this->assertFalse($this->user2->follow($this->user3));
         $this->assertTrue($this->user2->isFollowing($this->user3));
+        $this->assertTrue($this->user2->follows($this->user3));
 
         $this->assertFalse($this->user->isFollowing($this->user3));
         $this->assertFalse($this->user3->isFollowing($this->user2));
+        $this->assertFalse($this->user->follows($this->user3));
+        $this->assertFalse($this->user3->follows($this->user2));
 
         $this->assertEquals($this->user->following()->count(), 1);
         $this->assertEquals($this->user->followers()->count(), 0);
@@ -72,6 +77,7 @@ class FollowTest extends TestCase
         $this->assertTrue($this->user->follow($this->user2));
         $this->assertTrue($this->user->unfollow($this->user2));
         $this->assertFalse($this->user->isFollowing($this->user2));
+        $this->assertFalse($this->user->follows($this->user2));
 
         $this->assertEquals($this->user->following()->count(), 0);
         $this->assertEquals($this->user->followers()->count(), 0);
@@ -84,6 +90,7 @@ class FollowTest extends TestCase
         $this->assertTrue($this->user->follow($this->page));
         $this->assertFalse($this->user->follow($this->page));
         $this->assertTrue($this->user->isFollowing($this->page));
+        $this->assertTrue($this->user->follows($this->page));
 
         $this->assertTrue($this->user2->follow($this->page));
         $this->assertTrue($this->user3->follow($this->page));
@@ -91,6 +98,9 @@ class FollowTest extends TestCase
         $this->assertFalse($this->page->isFollowing($this->user));
         $this->assertFalse($this->page->isFollowing($this->user2));
         $this->assertFalse($this->page->isFollowing($this->user3));
+        $this->assertFalse($this->page->follows($this->user));
+        $this->assertFalse($this->page->follows($this->user2));
+        $this->assertFalse($this->page->follows($this->user3));
 
         $this->assertEquals($this->page->following()->count(), 0);
         $this->assertEquals($this->page->followers()->count(), 0);
@@ -120,6 +130,7 @@ class FollowTest extends TestCase
         $this->assertTrue($this->user->follow($this->page));
         $this->assertTrue($this->user->unfollow($this->page));
         $this->assertFalse($this->user->isFollowing($this->page));
+        $this->assertFalse($this->user->follows($this->page));
 
         $this->assertEquals($this->user->following()->count(), 0);
         $this->assertEquals($this->user->followers()->count(), 0);

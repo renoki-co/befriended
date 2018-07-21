@@ -24,6 +24,11 @@ trait CanLike
         return (bool) ! is_null($this->liking($model->getMorphClass())->find($model->getKey()));
     }
 
+    public function likes($model)
+    {
+        return $this->isLiking($model);
+    }
+
     public function like($model)
     {
         if (! $model instanceof Liker && ! $model instanceof Liking) {
