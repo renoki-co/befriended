@@ -4,7 +4,7 @@ namespace Rennokki\Befriended\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BlockerModel extends Model
+class BlockingModel extends Model
 {
     protected $table = 'blockers';
     protected $fillable = [
