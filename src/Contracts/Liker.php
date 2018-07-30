@@ -6,11 +6,11 @@ interface Liker
 {
     public function liking($model = null);
 
-    public function isLiking($model);
+    public function isLiking($model): bool;
 
-    public function likes($model);
+    public function likes($model): bool;
 
-    public function like($model);
+    public function like($model): bool;
 
-    public function unlike($model);
+    public function unlike($model): bool;
 }

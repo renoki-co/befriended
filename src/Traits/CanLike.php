@@ -27,7 +27,7 @@ trait CanLike
      * @param Model $model The model which will be checked against.
      * @return bool
      */
-    public function isLiking($model)
+    public function isLiking($model): bool
     {
         if (! $model instanceof Liker && ! $model instanceof Liking) {
             return false;
@@ -42,7 +42,7 @@ trait CanLike
      * @param Model $model The model which will be checked against.
      * @return bool
      */
-    public function likes($model)
+    public function likes($model): bool
     {
         return $this->isLiking($model);
     }
@@ -53,7 +53,7 @@ trait CanLike
      * @param Model $model The model which will be liked.
      * @return bool
      */
-    public function like($model)
+    public function like($model): bool
     {
         if (! $model instanceof Liker && ! $model instanceof Liking) {
             return false;
@@ -78,7 +78,7 @@ trait CanLike
      * @param Model $model The model which will be unliked.
      * @return bool
      */
-    public function unlike($model)
+    public function unlike($model): bool
     {
         if (! $model instanceof Liker && ! $model instanceof Liking) {
             return false;

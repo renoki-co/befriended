@@ -27,7 +27,7 @@ trait CanBlock
      * @param Model $model The model which will be checked against.
      * @return bool
      */
-    public function isBlocking($model)
+    public function isBlocking($model): bool
     {
         if (! $model instanceof Blocker && ! $model instanceof Blocking) {
             return false;
@@ -42,7 +42,7 @@ trait CanBlock
      * @param Model $model The model which will be checked against.
      * @return bool
      */
-    public function blocks($model)
+    public function blocks($model): bool
     {
         return $this->isBlocking($model);
     }
@@ -53,7 +53,7 @@ trait CanBlock
      * @param Model $model The model which will be blocked.
      * @return bool
      */
-    public function block($model)
+    public function block($model): bool
     {
         if (! $model instanceof Blocker && ! $model instanceof Blocking) {
             return false;
@@ -78,7 +78,7 @@ trait CanBlock
      * @param Model $model The model which will be unblocked.
      * @return bool
      */
-    public function unblock($model)
+    public function unblock($model): bool
     {
         if (! $model instanceof Blocker && ! $model instanceof Blocking) {
             return false;

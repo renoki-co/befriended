@@ -27,7 +27,7 @@ trait CanFollow
      * @param Model $model The model which will be checked against.
      * @return bool
      */
-    public function isFollowing($model)
+    public function isFollowing($model): bool
     {
         if (! $model instanceof Follower && ! $model instanceof Following) {
             return false;
@@ -42,7 +42,7 @@ trait CanFollow
      * @param Model $model The model which will be checked against.
      * @return bool
      */
-    public function follows($model)
+    public function follows($model): bool
     {
         return $this->isFollowing($model);
     }
@@ -53,7 +53,7 @@ trait CanFollow
      * @param Model $model The model which will be followed.
      * @return bool
      */
-    public function follow($model)
+    public function follow($model): bool
     {
         if (! $model instanceof Follower && ! $model instanceof Following) {
             return false;
@@ -78,7 +78,7 @@ trait CanFollow
      * @param Model $model The model which will be unfollowed.
      * @return bool
      */
-    public function unfollow($model)
+    public function unfollow($model): bool
     {
         if (! $model instanceof Follower && ! $model instanceof Following) {
             return false;
