@@ -6,9 +6,9 @@ interface Blocker
 {
     public function blocking($model = null);
 
-    public function isBlocking($model): float;
+    public function isBlocking($model): bool;
 
-    public function blocks($model): float;
+    public function blocks($model): bool;
 
     public function block($model): bool;
 
