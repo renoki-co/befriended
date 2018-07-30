@@ -6,11 +6,11 @@ interface Blocker
 {
     public function blocking($model = null);
 
-    public function isBlocking($model);
+    public function isBlocking($model): float;
 
-    public function blocks($model);
+    public function blocks($model): float;
 
-    public function block($model);
+    public function block($model): bool;
 
-    public function unblock($model);
+    public function unblock($model): bool;
 }
