@@ -16,6 +16,6 @@ trait CanBeBlocked
                     ->withPivot('blocker_type')
                     ->wherePivot('blocker_type', ($model) ?: $this->getMorphClass())
                     ->wherePivot('blockable_type', $this->getMorphClass());
-                     ->withTimestamps();
+                    ->withTimestamps();
     }
 }
