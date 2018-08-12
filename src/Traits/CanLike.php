@@ -18,7 +18,8 @@ trait CanLike
         return $this->morphToMany(($model) ?: $this->getMorphClass(), 'liker', 'likers', 'liker_id', 'likeable_id')
                     ->withPivot('likeable_type')
                     ->wherePivot('likeable_type', ($model) ?: $this->getMorphClass())
-                    ->wherePivot('liker_type', $this->getMorphClass());
+                    ->wherePivot('liker_type', $this->getMorphClass())
+                    ->withTimestamps();
     }
 
     /**
