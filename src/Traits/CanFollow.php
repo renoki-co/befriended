@@ -18,7 +18,8 @@ trait CanFollow
         return $this->morphToMany(($model) ?: $this->getMorphClass(), 'follower', 'followers', 'follower_id', 'followable_id')
                     ->withPivot('followable_type')
                     ->wherePivot('followable_type', ($model) ?: $this->getMorphClass())
-                    ->wherePivot('follower_type', $this->getMorphClass());
+                    ->wherePivot('follower_type', $this->getMorphClass())
+                    ->withTimestamps();
     }
 
     /**

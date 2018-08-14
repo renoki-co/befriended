@@ -18,7 +18,8 @@ trait CanBlock
         return $this->morphToMany(($model) ?: $this->getMorphClass(), 'blocker', 'blockers', 'blocker_id', 'blockable_id')
                     ->withPivot('blockable_type')
                     ->wherePivot('blockable_type', ($model) ?: $this->getMorphClass())
-                    ->wherePivot('blocker_type', $this->getMorphClass());
+                    ->wherePivot('blocker_type', $this->getMorphClass())
+                    ->withTimestamps();
     }
 
     /**
