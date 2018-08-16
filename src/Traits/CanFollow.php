@@ -31,11 +31,11 @@ trait CanFollow
      */
     public function isFollowing($model): bool
     {
-        if (!$model instanceof Following && !$model instanceof Followable) {
+        if (! $model instanceof Followable && ! $model instanceof Following) {
             return false;
         }
 
-        return (bool) !is_null($this->following($model->getMorphClass())->find($model->getKey()));
+        return (bool) ! is_null($this->following($model->getMorphClass())->find($model->getKey()));
     }
 
     /**
@@ -57,7 +57,7 @@ trait CanFollow
      */
     public function follow($model): bool
     {
-        if (!$model instanceof Following && !$model instanceof Followable) {
+        if (! $model instanceof Followable && ! $model instanceof Following) {
             return false;
         }
 
@@ -66,9 +66,9 @@ trait CanFollow
         }
 
         $this->following()->attach($this->getKey(), [
-            'follower_id'     => $this->getKey(),
+            'follower_id' => $this->getKey(),
             'followable_type' => $model->getMorphClass(),
-            'followable_id'   => $model->getKey(),
+            'followable_id' => $model->getKey(),
         ]);
 
         return true;
@@ -82,11 +82,11 @@ trait CanFollow
      */
     public function unfollow($model): bool
     {
-        if (!$model instanceof Following && !$model instanceof Followable) {
+        if (! $model instanceof Followable && ! $model instanceof Following) {
             return false;
         }
 
-        if (!$this->isFollowing($model)) {
+        if (! $this->isFollowing($model)) {
             return false;
         }
 
