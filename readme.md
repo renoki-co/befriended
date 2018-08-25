@@ -160,8 +160,8 @@ $user->block($user);
 $user->block($page);
 $user->unblock($user);
 
-$user->blockings(); // Users that this user blocks.
-$user->blockings(Page::class); // Pages that this user blocks.
+$user->blocking(); // Users that this user blocks.
+$user->blocking(Page::class); // Pages that this user blocks.
 $user->blockers(); // Users that block this user.
 $user->blockers(Page::class); // Pages that block this user.
 
@@ -223,8 +223,8 @@ $user->like($user);
 $user->like($page);
 $user->unlike($page);
 
-$user->likings(); // Users that this user likes.
-$user->likings(Page::class); // Pages that this user likes.
+$user->liking(); // Users that this user likes.
+$user->liking(Page::class); // Pages that this user likes.
 $user->likers(); // Users that like this user.
 $user->likers(Page::class); // Pages that like this user.
 
