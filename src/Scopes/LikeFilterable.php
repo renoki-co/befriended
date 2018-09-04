@@ -12,7 +12,7 @@ trait LikeFilterable
 
         $likedIds = collect($model->liking($this->getMorphClass())->get()->toArray())->pluck($model->getKeyName())->all();
 
-        return $query->whereIn($this->getKeyName(), $likedIds);   
+        return $query->whereIn($this->getKeyName(), $likedIds);
     }
 
     public function scopeNotLikedBy($query, $model)
@@ -23,7 +23,7 @@ trait LikeFilterable
 
         $likedIds = collect($model->liking($this->getMorphClass())->get()->toArray())->pluck($model->getKeyName())->all();
 
-        return $query->whereNotIn($this->getKeyName(), $likedIds);   
+        return $query->whereNotIn($this->getKeyName(), $likedIds);
     }
 
     public function scopeFilterUnlikedFor($query, $model)
