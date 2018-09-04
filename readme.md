@@ -11,6 +11,20 @@
 # Laravel Befriended
 Eloquent Befriended brings social media-like features like following, blocking and filtering content based on following or blocked models. Laravel Befriended comes with scopes that manage filtering content that gives you easy control better what your user can see and cannot see.
 
+# Switching from 1.1.x to 1.2.x
+The main difference is that the traits that are responsible for filtering content got a better eloquent capability.
+
+Make sure you replace the following traits:
+* `Rennokki\Befriended\Scopes\CanFilterFollowingModels`
+* `Rennokki\Befriended\Scopes\CanFilterUnfollowedModels`
+* `Rennokki\Befriended\Scopes\CanFilterBlockedModels`
+* `Rennokki\Befriended\Scopes\CanFilterUnlikedModels`
+
+with the following ones that are paired by the action they filter:
+* `Rennokki\Befriended\Scopes\FollowFilterable`
+* `Rennokki\Befriended\Scopes\BlockFilterable`
+* `Rennokki\Befriended\Scopes\LikeFilterable`
+
 # Installation
 Install the package:
 ```bash
@@ -30,6 +44,22 @@ $ php artisan vendor:publish
 Migrate the database:
 ```bash
 $ php artisan migrate
+```
+
+# Example
+The power of example is better here. This package allows you simply to assign followers, blockings or likes without too much effort. What makes the package powerful is that you can filter queries using scopes out-of-the-box.
+```php
+$alice = User::where('name', 'Alice')->first();
+$bob = User::where('name', 'Bob')->first();
+$tim = User::where('name', 'Tim')->first();
+
+$alice->follow($bob);
+
+$alice->following()->count(); // 1
+$bob->followers()->count(); // 1
+
+User::followedBy($alice)->get(); // Just Bob shows up
+User::unfollowedBy($alice)->get(); // Tim shows up
 ```
 
 # Following
@@ -66,7 +96,7 @@ class User extends Model implements Following {
 }
 ```
 
-Let's suppose we have an `User` model which can follow and be followed. On it, we can now check for followers or follow new users:
+Let's suppose we have an `User` model which can follow and be followed. Within it, we can now check for followers or follow new users:
 ```php
 $zuck = User::where('name', 'Mark Zuckerberg')->first();
 $user->follow($zuck);
@@ -101,25 +131,26 @@ $user->isFollowing($friend);
 $user->follows($friend); // alias
 ```
 
-**Note: Following, unfollowing or checking if following models that do not correctly implement `CanBeFollowed` and `Followable` will always return `false` and such relation will never be made.**
+**Note: Following, unfollowing or checking if following models that do not correctly implement `CanBeFollowed` and `Followable` will always return `false`.**
 
 ### Filtering followed/unfollowed models
-You can filter your queries using scopes provided by this package to filter followed models, if you plan, for example, to create a news feed, or if your user wants to find new people, you can filter the unfollowed models.
-Make sure your model uses the `Rennokki\Befriended\Scopes\CanFilterFollowingModels` trait for filtering following models and/or `Rennokki\Befriended\Scopes\CanFilterUnfollowedModels` for filtering unfollowed models.
+To filter followed or unfollowed models (which can be any other model) on query, your model which you will query should use the `Rennokki\Befriended\Scopes\FollowFilterable` trait.
+
+If your `User` model can only like other `Page` models, your `Page` model should use the trait mentioned.
 
 ```php
 $bob = User::where('username', 'john')->first();
 $alice = User::where('username', 'alice')->first();
 
-User::filterFollowingsOf($bob)->get(); // You will get no results.
-User::filterUnfollowingsOf($bob)->get(); // You will get Alice.
+User::followedBy($bob)->get(); // You will get no results.
+User::unfollowedBy($bob)->get(); // You will get Alice.
 
 $bob->follow($alice);
-User::filterFollowingsOf($bob)->get(); // You will get Alice as result.
+User::followedBy($bob)->get(); // Only Alice pops up.
 ```
 
 # Blocking
-Most of the functions are working like the follow feature. Here are some quick examples:
+Most of the functions are working like the follow feature, but this is helpful when your models would like to block other models.
 
 Use `CanBlock` trait and `Blocker` contract to allow the model to block other models.
 ```php
@@ -170,17 +201,17 @@ $user->blocks($page); // alias to isBlocking
 ```
 
 ### Filtering blocked models
-Blocking scopes provided takes away from the query the models that are blocked. Useful to stop showing content when someone blocks people.
-Make sure your model uses the `Rennokki\Befriended\Scopes\CanFilterBlockedModels` trait.
+Blocking scopes provided takes away from the query the models that are blocked. Useful to stop showing content when your models blocks other models.
+Make sure that the model that will be queried uses the  `Rennokki\Befriended\Scopes\BlockFilterable` trait.
 
 ```php
 $bob = User::where('username', 'john')->first();
 $alice = User::where('username', 'alice')->first();
 
-User::filterBlockingsOf($bob)->get(); // You will get Alice and Bob as results.
+User::withoutBlockingsOf($bob)->get(); // You will get Alice and Bob as results.
 
 $bob->block($alice);
-User::filterBlockingsOf($bob)->get(); // You will get only Bob as result.
+User::withoutBlockingsOf($bob)->get(); // You will get only Bob as result.
 ```
 
 # Liking
@@ -234,15 +265,16 @@ $user->likes($page); // alias to isLiking
 
 ### Filtering liked content
 Filtering liked content can make showing content easier. For example, showing in the news feed posts that weren't liked by an user can be helpful.
-The model you're querying from must use the `Rennokki\Befriended\Scopes\CanFilterUnlikedModels` trait.
+The model you're querying from must use the `Rennokki\Befriended\Scopes\LikeFilterable` trait.
 
 Let's suppose there are 10 pages in the database.
 ```php
 $bob = User::where('username', 'john')->first();
 $page = Page::find(1);
 
-Page::filterUnlikedFor($bob)->get(); // You will get 10 results.
+Page::notLikedBy($bob)->get(); // You will get 10 results.
 
 $bob->like($page);
-Page::filterUnlikedFor($bob)->get(); // You will get only 9 results.
+Page::notLikedBy($bob)->get(); // You will get only 9 results.
+Page::likedBy($bob)->get(); // You will get one result, the $page
 ```
