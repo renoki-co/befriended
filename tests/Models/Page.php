@@ -18,7 +18,7 @@ use Rennokki\Befriended\Scopes\FollowFilterable;
 
 class Page extends Model implements Following, Blocking, Liking
 {
-    use CanFollow, CanBeFollowed, CanBlock, CanBeBlocked, CanLike, CanBeLiked, 
+    use CanFollow, CanBeFollowed, CanBlock, CanBeBlocked, CanLike, CanBeLiked,
     LikeFilterable, BlockFilterable, FollowFilterable;
 
     protected $fillable = [
