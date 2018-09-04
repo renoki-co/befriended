@@ -30,7 +30,7 @@ trait CanLike
      */
     public function isLiking($model): bool
     {
-        if (! $model instanceof Liker && ! $model instanceof Liking) {
+        if (! $model instanceof Likeable && ! $model instanceof Liking) {
             return false;
         }
 
@@ -56,7 +56,7 @@ trait CanLike
      */
     public function like($model): bool
     {
-        if (! $model instanceof Liker && ! $model instanceof Liking) {
+        if (! $model instanceof Likeable && ! $model instanceof Liking) {
             return false;
         }
 
@@ -81,7 +81,7 @@ trait CanLike
      */
     public function unlike($model): bool
     {
-        if (! $model instanceof Liker && ! $model instanceof Liking) {
+        if (! $model instanceof Likeable && ! $model instanceof Liking) {
             return false;
         }
 

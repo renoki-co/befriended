@@ -30,7 +30,7 @@ trait CanBlock
      */
     public function isBlocking($model): bool
     {
-        if (! $model instanceof Blocker && ! $model instanceof Blocking) {
+        if (! $model instanceof Blockable && ! $model instanceof Blocking) {
             return false;
         }
 
@@ -56,7 +56,7 @@ trait CanBlock
      */
     public function block($model): bool
     {
-        if (! $model instanceof Blocker && ! $model instanceof Blocking) {
+        if (! $model instanceof Blockable && ! $model instanceof Blocking) {
             return false;
         }
 
@@ -81,7 +81,7 @@ trait CanBlock
      */
     public function unblock($model): bool
     {
-        if (! $model instanceof Blocker && ! $model instanceof Blocking) {
+        if (! $model instanceof Blockable && ! $model instanceof Blocking) {
             return false;
         }
 
