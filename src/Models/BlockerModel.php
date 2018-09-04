@@ -7,10 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class BlockerModel extends Model
 {
     protected $table = 'blockers';
-    protected $fillable = [
-        'blockable_id', 'blockable_type',
-        'blocker_id', 'blocker_type',
-    ];
+    protected $guarded = [];
 
     public function blockable()
     {
