@@ -7,10 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FollowerModel extends Model
 {
     protected $table = 'followers';
-    protected $fillable = [
-        'followable_id', 'followable_type',
-        'follower_id', 'follower_type',
-    ];
+    protected $guarded = [];
 
     public function followable()
     {

@@ -7,10 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class LikerModel extends Model
 {
     protected $table = 'likers';
-    protected $fillable = [
-        'likeable_id', 'likeable_type',
-        'liker_id', 'liker_type',
-    ];
+    protected $guarded = [];
 
     public function likeable()
     {
