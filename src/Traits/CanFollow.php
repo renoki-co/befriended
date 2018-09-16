@@ -2,7 +2,6 @@
 
 namespace Rennokki\Befriended\Traits;
 
-use Rennokki\Befriended\Contracts\Follower;
 use Rennokki\Befriended\Contracts\Following;
 use Rennokki\Befriended\Contracts\Followable;
 
