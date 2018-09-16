@@ -2,11 +2,14 @@
 
 namespace Rennokki\Befriended\Scopes;
 
+use Rennokki\Befriended\Contracts\Liker;
+use Rennokki\Befriended\Contracts\Liking;
+
 trait LikeFilterable
 {
     public function scopeLikedBy($query, $model)
     {
-        if (! $model instanceof Likeable && ! $model instanceof Liking) {
+        if (! $model instanceof Liker && ! $model instanceof Liking) {
             return $query;
         }
 
@@ -17,7 +20,7 @@ trait LikeFilterable
 
     public function scopeNotLikedBy($query, $model)
     {
-        if (! $model instanceof Likeable && ! $model instanceof Liking) {
+        if (! $model instanceof Liker && ! $model instanceof Liking) {
             return $query;
         }
 

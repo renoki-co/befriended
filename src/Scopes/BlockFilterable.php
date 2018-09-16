@@ -2,11 +2,14 @@
 
 namespace Rennokki\Befriended\Scopes;
 
+use Rennokki\Befriended\Contracts\Blocker;
+use Rennokki\Befriended\Contracts\Blocking;
+
 trait BlockFilterable
 {
     public function scopeWithoutBlockingsOf($query, $model)
     {
-        if (! $model instanceof Blockable && ! $model instanceof Blocking) {
+        if (! $model instanceof Blocker && ! $model instanceof Blocking) {
             return $query;
         }
 

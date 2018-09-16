@@ -2,11 +2,14 @@
 
 namespace Rennokki\Befriended\Scopes;
 
+use Rennokki\Befriended\Contracts\Follower;
+use Rennokki\Befriended\Contracts\Following;
+
 trait FollowFilterable
 {
     public function scopeFollowedBy($query, $model)
     {
-        if (! $model instanceof Followable && ! $model instanceof Following) {
+        if (! $model instanceof Follower && ! $model instanceof Following) {
             return $query;
         }
 
@@ -17,7 +20,7 @@ trait FollowFilterable
 
     public function scopeUnfollowedBy($query, $model)
     {
-        if (! $model instanceof Followable && ! $model instanceof Following) {
+        if (! $model instanceof Follower && ! $model instanceof Following) {
             return $query;
         }
 
