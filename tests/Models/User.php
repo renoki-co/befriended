@@ -11,16 +11,15 @@ use Rennokki\Befriended\Contracts\Blocking;
 use Rennokki\Befriended\Contracts\Following;
 use Rennokki\Befriended\Traits\CanBeBlocked;
 use Rennokki\Befriended\Traits\CanBeFollowed;
-use Rennokki\Befriended\Scopes\CanFilterBlockedModels;
-use Rennokki\Befriended\Scopes\CanFilterUnlikedModels;
+use Rennokki\Befriended\Scopes\LikeFilterable;
+use Rennokki\Befriended\Scopes\BlockFilterable;
+use Rennokki\Befriended\Scopes\FollowFilterable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Rennokki\Befriended\Scopes\CanFilterFollowingModels;
-use Rennokki\Befriended\Scopes\CanFilterUnfollowedModels;
 
 class User extends Authenticatable implements Following, Blocking, Liking
 {
-    use CanFollow, CanBeFollowed, CanBlock, CanBeBlocked, CanLike, CanBeLiked, CanFilterFollowingModels, CanFilterBlockedModels,
-        CanFilterUnfollowedModels, CanFilterUnlikedModels;
+    use CanFollow, CanBeFollowed, CanBlock, CanBeBlocked, CanLike, CanBeLiked,
+    LikeFilterable, BlockFilterable, FollowFilterable;
 
     protected $fillable = [
         'name', 'email', 'password',
