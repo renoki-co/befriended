@@ -2,7 +2,7 @@
 
 namespace Rennokki\Befriended\Traits;
 
-use Rennokki\Befriended\Contracts\Liker;
+use Rennokki\Befriended\Contracts\Likeable;
 use Rennokki\Befriended\Contracts\Liking;
 
 trait CanLike
