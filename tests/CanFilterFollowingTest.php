@@ -11,7 +11,7 @@ class CanFilterFollowingTest extends TestCase
     protected $user3;
     protected $page;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

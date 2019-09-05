@@ -13,7 +13,7 @@ class LikingTest extends TestCase
     protected $page;
     protected $simplePage;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
