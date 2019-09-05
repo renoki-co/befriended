@@ -10,8 +10,10 @@
 |
 */
 
+use Illuminate\Support\Str;
+
 $factory->define(\Rennokki\Befriended\Test\Models\Page::class, function () {
     return [
-        'name' => 'Page'.str_random(5),
+        'name' => 'Page'.Str::random(5),
     ];
 });

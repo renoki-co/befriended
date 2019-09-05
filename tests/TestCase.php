@@ -2,16 +2,16 @@
 
 namespace Rennokki\Befriended\Test;
 
+use Rennokki\Befriended\Test\Models\Page;
 use Rennokki\Befriended\Test\Models\User;
 use Rennokki\Befriended\Models\LikerModel;
-use Rennokki\Befriended\Test\Models\Pages;
 use Rennokki\Befriended\Models\BlockerModel;
 use Rennokki\Befriended\Models\FollowerModel;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
