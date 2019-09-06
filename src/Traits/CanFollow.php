@@ -64,10 +64,8 @@ trait CanFollow
             return false;
         }
 
-        $this->following()->attach($this->getKey(), [
-            'follower_id' => $this->getKey(),
+        $this->following()->attach($model->getKey(), [
             'followable_type' => $model->getMorphClass(),
-            'followable_id' => $model->getKey(),
         ]);
 
         return true;

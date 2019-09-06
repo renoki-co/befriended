@@ -64,10 +64,8 @@ trait CanLike
             return false;
         }
 
-        $this->liking()->attach($this->getKey(), [
-            'liker_id' => $this->getKey(),
+        $this->liking()->attach($model->getKey(), [
             'likeable_type' => $model->getMorphClass(),
-            'likeable_id' => $model->getKey(),
         ]);
 
         return true;

@@ -64,10 +64,8 @@ trait CanBlock
             return false;
         }
 
-        $this->blocking()->attach($this->getKey(), [
-            'blocker_id' => $this->getKey(),
+        $this->blocking()->attach($model->getKey(), [
             'blockable_type' => $model->getMorphClass(),
-            'blockable_id' => $model->getKey(),
         ]);
 
         return true;
