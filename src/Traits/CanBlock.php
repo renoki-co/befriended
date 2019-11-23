@@ -2,8 +2,8 @@
 
 namespace Rennokki\Befriended\Traits;
 
-use Rennokki\Befriended\Contracts\Blocking;
 use Rennokki\Befriended\Contracts\Blockable;
+use Rennokki\Befriended\Contracts\Blocking;
 
 trait CanBlock
 {
