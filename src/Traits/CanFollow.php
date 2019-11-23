@@ -2,8 +2,8 @@
 
 namespace Rennokki\Befriended\Traits;
 
-use Rennokki\Befriended\Contracts\Following;
 use Rennokki\Befriended\Contracts\Followable;
+use Rennokki\Befriended\Contracts\Following;
 
 trait CanFollow
 {
