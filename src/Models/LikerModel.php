@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class LikerModel extends Model
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected $table = 'likers';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected $guarded = [];
 

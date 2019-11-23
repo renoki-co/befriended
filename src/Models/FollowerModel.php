@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class FollowerModel extends Model
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected $table = 'followers';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected $guarded = [];
 

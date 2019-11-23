@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class BlockerModel extends Model
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected $table = 'blockers';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected $guarded = [];
 
