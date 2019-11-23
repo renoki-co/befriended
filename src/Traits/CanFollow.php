@@ -10,8 +10,8 @@ trait CanFollow
     /**
      * Relationship for models that this model is currently following.
      *
-     * @param Model $model The model types of the results.
-     * @return morphToMany The relationship.
+     * @param  null|\Illuminate\Database\Eloquent\Model  $model
+     * @return mixed
      */
     public function following($model = null)
     {
@@ -25,7 +25,7 @@ trait CanFollow
     /**
      * Check if the current model is following another model.
      *
-     * @param Model $model The model which will be checked against.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function isFollowing($model): bool
@@ -40,7 +40,7 @@ trait CanFollow
     /**
      * Check if the current model is following another model.
      *
-     * @param Model $model The model which will be checked against.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function follows($model): bool
@@ -51,7 +51,7 @@ trait CanFollow
     /**
      * Follow a certain model.
      *
-     * @param Model $model The model which will be followed.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function follow($model): bool
@@ -74,7 +74,7 @@ trait CanFollow
     /**
      * Unfollow a certain model.
      *
-     * @param Model $model The model which will be unfollowed.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function unfollow($model): bool

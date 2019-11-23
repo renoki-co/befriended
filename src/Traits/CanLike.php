@@ -10,8 +10,8 @@ trait CanLike
     /**
      * Relationship for models that this model is currently liking.
      *
-     * @param Model $model The model types of the results.
-     * @return morphToMany The relationship.
+     * @param  null|\Illuminate\Database\Eloquent\Model  $model
+     * @return mixed
      */
     public function liking($model = null)
     {
@@ -25,7 +25,7 @@ trait CanLike
     /**
      * Check if the current model is liking another model.
      *
-     * @param Model $model The model which will be checked against.
+     * @param  \Illuminate\Database\Eloquent\Model $model
      * @return bool
      */
     public function isLiking($model): bool
@@ -40,7 +40,7 @@ trait CanLike
     /**
      * Check if the current model is liking another model.
      *
-     * @param Model $model The model which will be checked against.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function likes($model): bool
@@ -51,7 +51,7 @@ trait CanLike
     /**
      * Like a certain model.
      *
-     * @param Model $model The model which will be liked.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function like($model): bool
@@ -74,7 +74,7 @@ trait CanLike
     /**
      * Unlike a certain model.
      *
-     * @param Model $model The model which will be unliked.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function unlike($model): bool

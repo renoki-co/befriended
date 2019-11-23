@@ -7,8 +7,8 @@ trait CanBeFollowed
     /**
      * Relationship for models that followed this model.
      *
-     * @param Model $model The model types of the results.
-     * @return morphToMany The relationship.
+     * @param  null|\Illuminate\Database\Eloquent\Model  $model
+     * @return mixed
      */
     public function followers($model = null)
     {

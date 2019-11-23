@@ -7,8 +7,8 @@ trait CanBeLiked
     /**
      * Relationship for models that liked this model.
      *
-     * @param Model $model The model types of the results.
-     * @return morphToMany The relationship.
+     * @param  null|\Illuminate\Database\Eloquent\Model  $model
+     * @return mixed
      */
     public function likers($model = null)
     {
