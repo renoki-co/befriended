@@ -10,14 +10,16 @@ trait CanFollow
     /**
      * Relationship for models that this model is currently following.
      *
-     * @param Model $model The model types of the results.
-     * @return morphToMany The relationship.
+     * @param  null|\Illuminate\Database\Eloquent\Model  $model
+     * @return mixed
      */
     public function following($model = null)
     {
-        return $this->morphToMany(($model) ?: $this->getMorphClass(), 'follower', 'followers', 'follower_id', 'followable_id')
+        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+
+        return $this->morphToMany($modelClass, 'follower', 'followers', 'follower_id', 'followable_id')
                     ->withPivot('followable_type')
-                    ->wherePivot('followable_type', ($model) ?: $this->getMorphClass())
+                    ->wherePivot('followable_type', $modelClass)
                     ->wherePivot('follower_type', $this->getMorphClass())
                     ->withTimestamps();
     }
@@ -25,7 +27,7 @@ trait CanFollow
     /**
      * Check if the current model is following another model.
      *
-     * @param Model $model The model which will be checked against.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function isFollowing($model): bool
@@ -34,13 +36,13 @@ trait CanFollow
             return false;
         }
 
-        return (bool) ! is_null($this->following($model->getMorphClass())->find($model->getKey()));
+        return ! is_null($this->following((new $model)->getMorphClass())->find($model->getKey()));
     }
 
     /**
      * Check if the current model is following another model.
      *
-     * @param Model $model The model which will be checked against.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function follows($model): bool
@@ -51,7 +53,7 @@ trait CanFollow
     /**
      * Follow a certain model.
      *
-     * @param Model $model The model which will be followed.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function follow($model): bool
@@ -65,7 +67,7 @@ trait CanFollow
         }
 
         $this->following()->attach($model->getKey(), [
-            'followable_type' => $model->getMorphClass(),
+            'followable_type' => (new $model)->getMorphClass(),
         ]);
 
         return true;
@@ -74,7 +76,7 @@ trait CanFollow
     /**
      * Unfollow a certain model.
      *
-     * @param Model $model The model which will be unfollowed.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function unfollow($model): bool
@@ -87,6 +89,6 @@ trait CanFollow
             return false;
         }
 
-        return (bool) $this->following($model->getMorphClass())->detach($model->getKey());
+        return (bool) $this->following((new $model)->getMorphClass())->detach($model->getKey());
     }
 }

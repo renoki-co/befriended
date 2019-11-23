@@ -10,14 +10,16 @@ trait CanLike
     /**
      * Relationship for models that this model is currently liking.
      *
-     * @param Model $model The model types of the results.
-     * @return morphToMany The relationship.
+     * @param  null|\Illuminate\Database\Eloquent\Model  $model
+     * @return mixed
      */
     public function liking($model = null)
     {
-        return $this->morphToMany(($model) ?: $this->getMorphClass(), 'liker', 'likers', 'liker_id', 'likeable_id')
+        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+
+        return $this->morphToMany($modelClass, 'liker', 'likers', 'liker_id', 'likeable_id')
                     ->withPivot('likeable_type')
-                    ->wherePivot('likeable_type', ($model) ?: $this->getMorphClass())
+                    ->wherePivot('likeable_type', $modelClass)
                     ->wherePivot('liker_type', $this->getMorphClass())
                     ->withTimestamps();
     }
@@ -25,7 +27,7 @@ trait CanLike
     /**
      * Check if the current model is liking another model.
      *
-     * @param Model $model The model which will be checked against.
+     * @param  \Illuminate\Database\Eloquent\Model $model
      * @return bool
      */
     public function isLiking($model): bool
@@ -34,13 +36,13 @@ trait CanLike
             return false;
         }
 
-        return (bool) ! is_null($this->liking($model->getMorphClass())->find($model->getKey()));
+        return ! is_null($this->liking((new $model)->getMorphClass())->find($model->getKey()));
     }
 
     /**
      * Check if the current model is liking another model.
      *
-     * @param Model $model The model which will be checked against.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function likes($model): bool
@@ -51,7 +53,7 @@ trait CanLike
     /**
      * Like a certain model.
      *
-     * @param Model $model The model which will be liked.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function like($model): bool
@@ -65,7 +67,7 @@ trait CanLike
         }
 
         $this->liking()->attach($model->getKey(), [
-            'likeable_type' => $model->getMorphClass(),
+            'likeable_type' => (new $model)->getMorphClass(),
         ]);
 
         return true;
@@ -74,7 +76,7 @@ trait CanLike
     /**
      * Unlike a certain model.
      *
-     * @param Model $model The model which will be unliked.
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function unlike($model): bool
@@ -87,6 +89,6 @@ trait CanLike
             return false;
         }
 
-        return (bool) $this->liking($model->getMorphClass())->detach($model->getKey());
+        return (bool) $this->liking((new $model)->getMorphClass())->detach($model->getKey());
     }
 }

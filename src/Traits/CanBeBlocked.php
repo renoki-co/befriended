@@ -7,14 +7,16 @@ trait CanBeBlocked
     /**
      * Relationship for models that blocked this model.
      *
-     * @param Model $model The model types of the results.
-     * @return morphToMany The relationship.
+     * @param  null|\Illuminate\Database\Eloquent\Model  $model
+     * @return mixed
      */
     public function blockers($model = null)
     {
-        return $this->morphToMany(($model) ?: $this->getMorphClass(), 'blockable', 'blockers', 'blockable_id', 'blocker_id')
+        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+
+        return $this->morphToMany($modelClass, 'blockable', 'blockers', 'blockable_id', 'blocker_id')
                     ->withPivot('blocker_type')
-                    ->wherePivot('blocker_type', ($model) ?: $this->getMorphClass())
+                    ->wherePivot('blocker_type', $modelClass)
                     ->wherePivot('blockable_type', $this->getMorphClass())
                     ->withTimestamps();
     }
