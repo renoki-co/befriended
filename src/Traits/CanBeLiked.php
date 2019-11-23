@@ -12,9 +12,11 @@ trait CanBeLiked
      */
     public function likers($model = null)
     {
-        return $this->morphToMany(($model) ?: $this->getMorphClass(), 'likeable', 'likers', 'likeable_id', 'liker_id')
+        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+
+        return $this->morphToMany($modelClass, 'likeable', 'likers', 'likeable_id', 'liker_id')
                     ->withPivot('liker_type')
-                    ->wherePivot('liker_type', ($model) ?: $this->getMorphClass())
+                    ->wherePivot('liker_type', $modelClass)
                     ->wherePivot('likeable_type', $this->getMorphClass())
                     ->withTimestamps();
     }

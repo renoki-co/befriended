@@ -15,9 +15,11 @@ trait CanFollow
      */
     public function following($model = null)
     {
-        return $this->morphToMany(($model) ?: $this->getMorphClass(), 'follower', 'followers', 'follower_id', 'followable_id')
+        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+
+        return $this->morphToMany($modelClass, 'follower', 'followers', 'follower_id', 'followable_id')
                     ->withPivot('followable_type')
-                    ->wherePivot('followable_type', ($model) ?: $this->getMorphClass())
+                    ->wherePivot('followable_type', $modelClass)
                     ->wherePivot('follower_type', $this->getMorphClass())
                     ->withTimestamps();
     }
@@ -34,7 +36,7 @@ trait CanFollow
             return false;
         }
 
-        return (bool) ! is_null($this->following($model->getMorphClass())->find($model->getKey()));
+        return ! is_null($this->following((new $model)->getMorphClass())->find($model->getKey()));
     }
 
     /**
@@ -65,7 +67,7 @@ trait CanFollow
         }
 
         $this->following()->attach($model->getKey(), [
-            'followable_type' => $model->getMorphClass(),
+            'followable_type' => (new $model)->getMorphClass(),
         ]);
 
         return true;
@@ -87,6 +89,6 @@ trait CanFollow
             return false;
         }
 
-        return (bool) $this->following($model->getMorphClass())->detach($model->getKey());
+        return (bool) $this->following((new $model)->getMorphClass())->detach($model->getKey());
     }
 }

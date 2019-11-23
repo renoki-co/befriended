@@ -15,9 +15,11 @@ trait CanLike
      */
     public function liking($model = null)
     {
-        return $this->morphToMany(($model) ?: $this->getMorphClass(), 'liker', 'likers', 'liker_id', 'likeable_id')
+        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+
+        return $this->morphToMany($modelClass, 'liker', 'likers', 'liker_id', 'likeable_id')
                     ->withPivot('likeable_type')
-                    ->wherePivot('likeable_type', ($model) ?: $this->getMorphClass())
+                    ->wherePivot('likeable_type', $modelClass)
                     ->wherePivot('liker_type', $this->getMorphClass())
                     ->withTimestamps();
     }
@@ -34,7 +36,7 @@ trait CanLike
             return false;
         }
 
-        return (bool) ! is_null($this->liking($model->getMorphClass())->find($model->getKey()));
+        return ! is_null($this->liking((new $model)->getMorphClass())->find($model->getKey()));
     }
 
     /**
@@ -65,7 +67,7 @@ trait CanLike
         }
 
         $this->liking()->attach($model->getKey(), [
-            'likeable_type' => $model->getMorphClass(),
+            'likeable_type' => (new $model)->getMorphClass(),
         ]);
 
         return true;
@@ -87,6 +89,6 @@ trait CanLike
             return false;
         }
 
-        return (bool) $this->liking($model->getMorphClass())->detach($model->getKey());
+        return (bool) $this->liking((new $model)->getMorphClass())->detach($model->getKey());
     }
 }

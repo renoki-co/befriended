@@ -12,9 +12,11 @@ trait CanBeBlocked
      */
     public function blockers($model = null)
     {
-        return $this->morphToMany(($model) ?: $this->getMorphClass(), 'blockable', 'blockers', 'blockable_id', 'blocker_id')
+        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+
+        return $this->morphToMany($modelClass, 'blockable', 'blockers', 'blockable_id', 'blocker_id')
                     ->withPivot('blocker_type')
-                    ->wherePivot('blocker_type', ($model) ?: $this->getMorphClass())
+                    ->wherePivot('blocker_type', $modelClass)
                     ->wherePivot('blockable_type', $this->getMorphClass())
                     ->withTimestamps();
     }
