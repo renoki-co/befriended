@@ -124,7 +124,6 @@ class FollowRequestTest extends TestCase
         $this->assertTrue($this->user->cancelFollowRequest($this->user2));
         $this->assertFalse($this->user->isFollowing($this->user2));
 
-
         $this->assertEquals($this->user2->followRequests()->count(), 0);
         $this->assertEquals($this->user2->followers()->count(), 0);
     }

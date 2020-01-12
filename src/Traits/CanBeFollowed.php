@@ -41,7 +41,6 @@ trait CanBeFollowed
             ->withTimestamps();
     }
 
-
     /**
      * Check if the model has requested to follow the current model.
      *
@@ -56,7 +55,6 @@ trait CanBeFollowed
 
         return ! is_null($this->followerRequests((new $model)->getMorphClass())->find($model->getKey()));
     }
-
 
     /**
      * Accept request from a certain model to be followed.

@@ -12,7 +12,6 @@ interface Followable
      */
     public function followers($model = null);
 
-
     /**
      * Relationship for models that has requested to follow this model.
      *
@@ -21,7 +20,6 @@ interface Followable
      */
     public function followerRequests($model = null);
 
-
     /**
      * Check if the model has requested to follow the current model.
      *
@@ -29,7 +27,6 @@ interface Followable
      * @return bool
      */
     public function hasFollowRequestFrom($model): bool;
-
 
     /**
      * Accept request from a certain model to be followed.
