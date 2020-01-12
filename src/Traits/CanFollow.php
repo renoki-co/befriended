@@ -70,6 +70,10 @@ trait CanFollow
             'followable_type' => (new $model)->getMorphClass(),
         ]);
 
+        if ($this->hasFollowRequested($model)) {
+            $this->followRequests((new $model)->getMorphClass())->detach($model->getKey());
+        }
+
         return true;
     }
 
@@ -90,5 +94,83 @@ trait CanFollow
         }
 
         return (bool) $this->following((new $model)->getMorphClass())->detach($model->getKey());
+    }
+
+    /**
+     * Relationship for models that this model currently has requests for.
+     *
+     * @param  null|\Illuminate\Database\Eloquent\Model  $model
+     * @return mixed
+     */
+    public function followRequests($model = null)
+    {
+        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+
+        return $this->morphToMany($modelClass, 'follow_requester', 'follow_requests', 'follow_requester_id', 'follow_requestable_id')
+            ->withPivot('follow_requestable_type')
+            ->wherePivot('follow_requestable_type', $modelClass)
+            ->wherePivot('follow_requester_type', $this->getMorphClass())
+            ->withTimestamps();
+    }
+
+    /**
+     * Check if the current model has requested to follow another model.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return bool
+     */
+    public function hasFollowRequested($model): bool
+    {
+        if (! $model instanceof Followable && ! $model instanceof Following) {
+            return false;
+        }
+
+        return ! is_null($this->followRequests((new $model)->getMorphClass())->find($model->getKey()));
+    }
+
+    /**
+     * Request to follow a certain model.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return bool
+     */
+    public function followRequest($model): bool
+    {
+        if (! $model instanceof Followable && ! $model instanceof Following) {
+            return false;
+        }
+
+        if ($this->hasFollowRequested($model)) {
+            return false;
+        }
+
+        if ($this->isFollowing($model)) {
+            return false;
+        }
+
+        $this->followRequests()->attach($model->getKey(), [
+            'follow_requestable_type' => (new $model)->getMorphClass(),
+        ]);
+
+        return true;
+    }
+
+    /**
+     * Cancel follow request a certain model.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return bool
+     */
+    public function cancelFollowRequest($model): bool
+    {
+        if (! $model instanceof Followable && ! $model instanceof Following) {
+            return false;
+        }
+
+        if (! $this->hasFollowRequested($model)) {
+            return false;
+        }
+
+        return (bool) $this->followRequests((new $model)->getMorphClass())->detach($model->getKey());
     }
 }
