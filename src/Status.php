@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Rennokki\Befriended;
-
 
 class Status
 {

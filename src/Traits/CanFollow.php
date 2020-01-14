@@ -72,7 +72,7 @@ trait CanFollow
             $this->followRequests((new $model)->getMorphClass())->find($model->getKey())->pivot->update(['status' => Status::ACCEPTED]);
         } else {
             $this->following()->attach($model->getKey(), [
-                'followable_type' => (new $model)->getMorphClass()
+                'followable_type' => (new $model)->getMorphClass(),
             ]);
         }
 
@@ -153,7 +153,7 @@ trait CanFollow
 
         $this->followRequests()->attach($model->getKey(), [
             'followable_type' => (new $model)->getMorphClass(),
-            'status' => Status::PENDING
+            'status' => Status::PENDING,
         ]);
 
         return true;
