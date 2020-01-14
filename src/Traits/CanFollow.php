@@ -4,6 +4,7 @@ namespace Rennokki\Befriended\Traits;
 
 use Rennokki\Befriended\Contracts\Followable;
 use Rennokki\Befriended\Contracts\Following;
+use Rennokki\Befriended\Status;
 
 trait CanFollow
 {
@@ -18,9 +19,10 @@ trait CanFollow
         $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
 
         return $this->morphToMany($modelClass, 'follower', 'followers', 'follower_id', 'followable_id')
-                    ->withPivot('followable_type')
+                    ->withPivot(['followable_type', 'status'])
                     ->wherePivot('followable_type', $modelClass)
                     ->wherePivot('follower_type', $this->getMorphClass())
+                    ->wherePivot('status', Status::ACCEPTED)
                     ->withTimestamps();
     }
 
@@ -66,12 +68,12 @@ trait CanFollow
             return false;
         }
 
-        $this->following()->attach($model->getKey(), [
-            'followable_type' => (new $model)->getMorphClass(),
-        ]);
-
         if ($this->hasFollowRequested($model)) {
-            $this->followRequests((new $model)->getMorphClass())->detach($model->getKey());
+            $this->followRequests((new $model)->getMorphClass())->find($model->getKey())->pivot->update(['status' => Status::ACCEPTED]);
+        } else {
+            $this->following()->attach($model->getKey(), [
+                'followable_type' => (new $model)->getMorphClass()
+            ]);
         }
 
         return true;
@@ -106,10 +108,11 @@ trait CanFollow
     {
         $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
 
-        return $this->morphToMany($modelClass, 'follow_requester', 'follow_requests', 'follow_requester_id', 'follow_requestable_id')
-            ->withPivot('follow_requestable_type')
-            ->wherePivot('follow_requestable_type', $modelClass)
-            ->wherePivot('follow_requester_type', $this->getMorphClass())
+        return $this->morphToMany($modelClass, 'follower', 'followers', 'follower_id', 'followable_id')
+            ->withPivot(['followable_type', 'status'])
+            ->wherePivot('followable_type', $modelClass)
+            ->wherePivot('follower_type', $this->getMorphClass())
+            ->wherePivot('status', Status::PENDING)
             ->withTimestamps();
     }
 
@@ -149,7 +152,8 @@ trait CanFollow
         }
 
         $this->followRequests()->attach($model->getKey(), [
-            'follow_requestable_type' => (new $model)->getMorphClass(),
+            'followable_type' => (new $model)->getMorphClass(),
+            'status' => Status::PENDING
         ]);
 
         return true;

@@ -4,6 +4,7 @@ namespace Rennokki\Befriended\Traits;
 
 use Rennokki\Befriended\Contracts\Followable;
 use Rennokki\Befriended\Contracts\Following;
+use Rennokki\Befriended\Status;
 
 trait CanBeFollowed
 {
@@ -18,9 +19,10 @@ trait CanBeFollowed
         $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
 
         return $this->morphToMany($modelClass, 'followable', 'followers', 'followable_id', 'follower_id')
-                    ->withPivot('follower_type')
+                    ->withPivot(['follower_type', 'status'])
                     ->wherePivot('follower_type', $modelClass)
                     ->wherePivot('followable_type', $this->getMorphClass())
+                    ->wherePivot('status', Status::ACCEPTED)
                     ->withTimestamps();
     }
 
@@ -34,10 +36,11 @@ trait CanBeFollowed
     {
         $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
 
-        return $this->morphToMany($modelClass, 'follow_requestable', 'follow_requests', 'follow_requestable_id', 'follow_requester_id')
-            ->withPivot('follow_requester_type')
-            ->wherePivot('follow_requester_type', $modelClass)
-            ->wherePivot('follow_requestable_type', $this->getMorphClass())
+        return $this->morphToMany($modelClass, 'followable', 'followers', 'followable_id', 'follower_id')
+            ->withPivot(['follower_type', 'status'])
+            ->wherePivot('follower_type', $modelClass)
+            ->wherePivot('followable_type', $this->getMorphClass())
+            ->wherePivot('status', Status::PENDING)
             ->withTimestamps();
     }
 
@@ -72,11 +75,7 @@ trait CanBeFollowed
             return false;
         }
 
-        $this->followerRequests((new $model)->getMorphClass())->detach($model->getKey());
-
-        $this->followers()->attach($model->getKey(), [
-            'follower_type' => (new $model)->getMorphClass(),
-        ]);
+        $this->followerRequests((new $model)->getMorphClass())->find($model->getKey())->pivot->update(['status' => Status::ACCEPTED]);
 
         return true;
     }
