@@ -11,6 +11,11 @@ use Rennokki\Befriended\Test\Models\User;
 
 abstract class TestCase extends Orchestra
 {
+    /**
+     * Set up the tests.
+     *
+     * @return void
+     */
     public function setUp(): void
     {
         parent::setUp();
@@ -20,11 +25,17 @@ abstract class TestCase extends Orchestra
         $this->loadLaravelMigrations(['--database' => 'sqlite']);
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
-        $this->withFactories(__DIR__.'/../database/factories');
+        $this->withFactories(__DIR__.'/database/factories');
 
         $this->artisan('migrate', ['--database' => 'sqlite']);
     }
 
+    /**
+     * Get the package providers for tests.
+     *
+     * @param  mixed  $app
+     * @return array
+     */
     protected function getPackageProviders($app)
     {
         return [
@@ -32,6 +43,12 @@ abstract class TestCase extends Orchestra
         ];
     }
 
+    /**
+     * Set up the environment.
+     *
+     * @param  mixed  $app
+     * @return void
+     */
     public function getEnvironmentSetUp($app)
     {
         $app['config']->set('database.default', 'sqlite');
@@ -48,6 +65,11 @@ abstract class TestCase extends Orchestra
         $app['config']->set('befriended.models.liker', LikerModel::class);
     }
 
+    /**
+     * Reset the database.
+     *
+     * @return void
+     */
     protected function resetDatabase()
     {
         file_put_contents(__DIR__.'/database.sqlite', null);
