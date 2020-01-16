@@ -4,7 +4,6 @@ namespace Rennokki\Befriended\Traits;
 
 use Rennokki\Befriended\Contracts\Followable;
 use Rennokki\Befriended\Contracts\Following;
-use Rennokki\Befriended\Status;
 
 trait CanFollow
 {
@@ -19,10 +18,10 @@ trait CanFollow
         $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
 
         return $this->morphToMany($modelClass, 'follower', 'followers', 'follower_id', 'followable_id')
-                    ->withPivot(['followable_type', 'status'])
+                    ->withPivot(['followable_type', 'accepted'])
                     ->wherePivot('followable_type', $modelClass)
                     ->wherePivot('follower_type', $this->getMorphClass())
-                    ->wherePivot('status', Status::ACCEPTED)
+                    ->wherePivot('accepted', true)
                     ->withTimestamps();
     }
 
@@ -69,7 +68,7 @@ trait CanFollow
         }
 
         if ($this->hasFollowRequested($model)) {
-            $this->followRequests((new $model)->getMorphClass())->find($model->getKey())->pivot->update(['status' => Status::ACCEPTED]);
+            $this->followRequests((new $model)->getMorphClass())->find($model->getKey())->pivot->update(['accepted' => true]);
         } else {
             $this->following()->attach($model->getKey(), [
                 'followable_type' => (new $model)->getMorphClass(),
@@ -109,10 +108,10 @@ trait CanFollow
         $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
 
         return $this->morphToMany($modelClass, 'follower', 'followers', 'follower_id', 'followable_id')
-            ->withPivot(['followable_type', 'status'])
+            ->withPivot(['followable_type', 'accepted'])
             ->wherePivot('followable_type', $modelClass)
             ->wherePivot('follower_type', $this->getMorphClass())
-            ->wherePivot('status', Status::PENDING)
+            ->wherePivot('accepted', false)
             ->withTimestamps();
     }
 
@@ -153,7 +152,7 @@ trait CanFollow
 
         $this->followRequests()->attach($model->getKey(), [
             'followable_type' => (new $model)->getMorphClass(),
-            'status' => Status::PENDING,
+            'accepted' => false,
         ]);
 
         return true;

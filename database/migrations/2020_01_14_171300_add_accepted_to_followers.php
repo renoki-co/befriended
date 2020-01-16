@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRequestToFollowers extends Migration
+class AddAcceptedToFollowers extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddRequestToFollowers extends Migration
     public function up()
     {
         Schema::table('followers', function (Blueprint $table) {
-            $table->boolean('status')->default(1);
+            $table->boolean('accepted')->default(1);
         });
     }
 
@@ -26,7 +26,7 @@ class AddRequestToFollowers extends Migration
     public function down()
     {
         Schema::table('followers', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropColumn('accepted');
         });
     }
 }

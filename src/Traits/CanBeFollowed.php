@@ -4,7 +4,6 @@ namespace Rennokki\Befriended\Traits;
 
 use Rennokki\Befriended\Contracts\Followable;
 use Rennokki\Befriended\Contracts\Following;
-use Rennokki\Befriended\Status;
 
 trait CanBeFollowed
 {
@@ -19,10 +18,10 @@ trait CanBeFollowed
         $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
 
         return $this->morphToMany($modelClass, 'followable', 'followers', 'followable_id', 'follower_id')
-                    ->withPivot(['follower_type', 'status'])
+                    ->withPivot(['follower_type', 'accepted'])
                     ->wherePivot('follower_type', $modelClass)
                     ->wherePivot('followable_type', $this->getMorphClass())
-                    ->wherePivot('status', Status::ACCEPTED)
+                    ->wherePivot('accepted', true)
                     ->withTimestamps();
     }
 
@@ -37,10 +36,10 @@ trait CanBeFollowed
         $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
 
         return $this->morphToMany($modelClass, 'followable', 'followers', 'followable_id', 'follower_id')
-            ->withPivot(['follower_type', 'status'])
+            ->withPivot(['follower_type', 'accepted'])
             ->wherePivot('follower_type', $modelClass)
             ->wherePivot('followable_type', $this->getMorphClass())
-            ->wherePivot('status', Status::PENDING)
+            ->wherePivot('accepted', false)
             ->withTimestamps();
     }
 
@@ -75,7 +74,7 @@ trait CanBeFollowed
             return false;
         }
 
-        $this->followerRequests((new $model)->getMorphClass())->find($model->getKey())->pivot->update(['status' => Status::ACCEPTED]);
+        $this->followerRequests((new $model)->getMorphClass())->find($model->getKey())->pivot->update(['accepted' => true]);
 
         return true;
     }

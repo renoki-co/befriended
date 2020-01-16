@@ -21,7 +21,7 @@ class BefriendedServiceProvider extends ServiceProvider
             __DIR__.'/../database/migrations/2018_07_14_183253_followers.php' => database_path('migrations/2018_07_14_183253_followers.php'),
             __DIR__.'/../database/migrations/2018_07_14_183254_blockers.php' => database_path('migrations/2018_07_14_183254_blockers.php'),
             __DIR__.'/../database/migrations/2018_07_14_183255_likers.php' => database_path('migrations/2018_07_14_183255_likers.php'),
-            __DIR__.'/../database/migrations/2020_01_14_171300_add_request_to_followers.php' => database_path('migrations/2020_01_14_171300_add_request_to_followers.php'),
+            __DIR__ . '/../database/migrations/2020_01_14_171300_add_accepted_to_followers.php' => database_path('migrations/2020_01_14_171300_add_accepted_to_followers.php'),
         ], 'migration');
     }
 
