@@ -23,7 +23,6 @@
     "authors": [
         {
             "name": "Alex Renoki",
-            "email": "rennokki@gmail.com",
             "homepage": "https://twitter.com/rennokki",
             "role": "Developer"
         }
@@ -33,9 +32,9 @@
         "laravel/framework": "~5.5|^6.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.2|^7.0|^8.0",
-        "orchestra/testbench": "~3.5.0|~3.6.0|~4.0.0",
-        "orchestra/database": "~3.5.0|~3.6.0|~4.0.0"
+        "phpunit/phpunit": "^8.0",
+        "orchestra/testbench": "~4.2.0",
+        "orchestra/database": "~4.2.0"
     },
     "autoload": {
         "psr-4": {
