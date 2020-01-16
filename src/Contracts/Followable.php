@@ -34,7 +34,7 @@ interface Followable
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
-    public function AcceptFollowRequest($model): bool;
+    public function acceptFollowRequest($model): bool;
 
     /**
      * Decline request from a certain model to be followed.
