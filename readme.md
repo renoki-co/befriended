@@ -278,3 +278,93 @@ $bob->like($page);
 Page::notLikedBy($bob)->get(); // You will get only 9 results.
 Page::likedBy($bob)->get(); // You will get one result, the $page
 ```
+
+# Follow requests
+This is similar to the way Instagram allows you to request follow of a private profile.
+
+To follow other models, your model should use the `CanFollow` trait and `Follower` contract.
+```php
+use Rennokki\Befriended\Traits\CanFollow;
+use Rennokki\Befriended\Contracts\Follower;
+
+class User extends Model implements Follower {
+    use CanFollow;
+    ...
+}
+```
+
+The other models that can be followed should use `CanBeFollowed` trait and `Followable` contract.
+```php
+use Rennokki\Befriended\Traits\CanBeFollowed;
+use Rennokki\Befriended\Contracts\Followable;
+
+class User extends Model implements Followable {
+    use CanBeFollowed;
+    ...
+}
+```
+
+If your model can both follow & be followed, you can use `Follow` trait and `Following` contract.
+```php
+use Rennokki\Befriended\Traits\Follow;
+use Rennokki\Befriended\Contracts\Following;
+
+class User extends Model implements Following {
+    use Follow;
+    ...
+}
+```
+
+Let's suppose we have an `User` model which can follow and be followed. Within it, we can now check for follower requests or request to follow a users:
+```php
+$zuck = User::where('name', 'Mark Zuckerberg')->first();
+$user->followRequest($zuck);
+
+$user->followRequests()->count(); // 1
+$zuck->followerRequests()->count(); // 1
+$user->follows($zuck); // false
+$zuck->acceptFollowRequest($user); // true
+$user->follows($zuck); // true
+```
+
+Now, let's suppose we have a `Page` model, than can only be followed:
+```php
+use Rennokki\Befriended\Traits\CanBeFollowed;
+use Rennokki\Befriended\Contracts\Followable;
+
+class Page extends Model implements Followable {
+    use CanBeFollowed;
+    ...
+}
+```
+
+### Sending a request
+```php
+$user->followRequest($zuck);
+```
+
+### Canceling a request
+```php
+$user->cancelFollowRequest($zuck);
+```
+
+### Accepting a request
+```php
+$zuck->acceptFollowRequest($user);
+```
+
+### Declining a request
+```php
+$zuck->declineFollowRequest($user);
+```
+
+By default, if querying `followRequests()` and `followerRequests()` from the `User` instance, the relationships will return only `User` instances. If you plan to retrieve other instances, such as `Page`, you can pass the model name or model class as an argument to the relationships:
+```php
+$zuckPage = Page::where('username', 'zuck')->first();
+
+$user->followRequest($zuckPage);
+$user->followRequests()->count(); // 0, because it does not have any requests from any User instance
+$user->followerRequests(Page::class)->count(); // 1, because it has a follow request for Zuck's page.
+```
+
+**Note: Requesting, accepting, declining or checking if following models that do not correctly implement `CanBeFollowed` and `Followable` will always return `false`.**
