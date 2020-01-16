@@ -64,7 +64,7 @@ trait CanBeFollowed
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
-    public function AcceptFollowRequest($model): bool
+    public function acceptFollowRequest($model): bool
     {
         if (! $model instanceof Followable && ! $model instanceof Following) {
             return false;
