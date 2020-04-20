@@ -6,8 +6,6 @@
 [![Monthly Downloads](https://poser.pugx.org/rennokki/befriended/d/monthly)](https://packagist.org/packages/rennokki/befriended)
 [![License](https://poser.pugx.org/rennokki/befriended/license)](https://packagist.org/packages/rennokki/befriended)
 
-[![PayPal](https://img.shields.io/badge/PayPal-donate-blue.svg)](https://paypal.me/rennokki)
-
 # Laravel Befriended
 Eloquent Befriended brings social media-like features like following, blocking and filtering content based on following or blocked models. Laravel Befriended comes with scopes that manage filtering content that gives you easy control better what your user can see and cannot see.
 
@@ -368,3 +366,20 @@ $user->followerRequests(Page::class)->count(); // 1, because it has a follow req
 ```
 
 **Note: Requesting, accepting, declining or checking if following models that do not correctly implement `CanBeFollowed` and `Followable` will always return `false`.**
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## Security
+
+If you discover any security related issues, please email alex@renoki.org instead of using the issue tracker.
+
+## Credits
+
+- [Alex Renoki](https://github.com/rennokki)
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
