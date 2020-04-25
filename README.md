@@ -36,7 +36,7 @@ Migrate the database:
 $ php artisan migrate
 ```
 
-# Example
+# Usage
 
 The power of example is better here. This package allows you simply to assign followers, blockings or likes without too much effort. What makes the package powerful is that you can filter queries using scopes out-of-the-box.
 
@@ -54,7 +54,7 @@ User::followedBy($alice)->get(); // Just Bob shows up
 User::unfollowedBy($alice)->get(); // Tim shows up
 ```
 
-# Following
+## Following
 
 To follow other models, your model should use the `CanFollow` trait and `Follower` contract.
 
@@ -150,7 +150,7 @@ $bob->follow($alice);
 User::followedBy($bob)->get(); // Only Alice pops up.
 ```
 
-# Blocking
+## Blocking
 
 Most of the functions are working like the follow feature, but this is helpful when your models would like to block other models.
 
@@ -222,7 +222,7 @@ $bob->block($alice);
 User::withoutBlockingsOf($bob)->get(); // You will get only Bob as result.
 ```
 
-# Liking
+## Liking
 
 Apply `CanLike` trait and `Liker` contract for models that can like:
 
@@ -295,7 +295,7 @@ Page::notLikedBy($bob)->get(); // You will get only 9 results.
 Page::likedBy($bob)->get(); // You will get one result, the $page
 ```
 
-# Follow requests
+## Follow requests
 
 This is similar to the way Instagram allows you to request follow of a private profile.
 
@@ -360,27 +360,17 @@ class Page extends Model implements Followable {
 }
 ```
 
-### Sending a request
+You can then request or cancel the follow requests:
 
 ```php
 $user->followRequest($zuck);
-```
-
-### Canceling a request
-
-```php
 $user->cancelFollowRequest($zuck);
 ```
 
-### Accepting a request
+The one being followed can accept or decline the requests:
 
 ```php
 $zuck->acceptFollowRequest($user);
-```
-
-### Declining a request
-
-```php
 $zuck->declineFollowRequest($user);
 ```
 
