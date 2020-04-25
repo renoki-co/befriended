@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/rennokki/befriended.svg?branch=master)](https://travis-ci.org/rennokki/befriended)
+![CI](https://github.com/renoki-co/befriended/workflows/CI/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/rennokki/befriended/branch/master/graph/badge.svg)](https://codecov.io/gh/rennokki/befriended/branch/master)
 [![StyleCI](https://github.styleci.io/repos/141194551/shield?branch=master)](https://github.styleci.io/repos/141194551)
 [![Latest Stable Version](https://poser.pugx.org/rennokki/befriended/v/stable)](https://packagist.org/packages/rennokki/befriended)
