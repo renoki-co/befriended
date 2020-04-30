@@ -1,3 +1,6 @@
+Laravel Befriended
+==================
+
 ![CI](https://github.com/renoki-co/befriended/workflows/CI/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/renoki-co/befriended/branch/master/graph/badge.svg)](https://codecov.io/gh/renoki-co/befriended/branch/master)
 [![StyleCI](https://github.styleci.io/repos/141194551/shield?branch=master)](https://github.styleci.io/repos/141194551)
@@ -6,22 +9,14 @@
 [![Monthly Downloads](https://poser.pugx.org/rennokki/befriended/d/monthly)](https://packagist.org/packages/rennokki/befriended)
 [![License](https://poser.pugx.org/rennokki/befriended/license)](https://packagist.org/packages/rennokki/befriended)
 
-# Laravel Befriended
+Eloquent Befriended brings social media-like features like following, blocking and filtering content based on following or blocked models
 
-Eloquent Befriended brings social media-like features like following, blocking and filtering content based on following or blocked models.
-
-# Installation
+## 🚀 Installation
 
 Install the package:
 
 ```bash
 $ composer require rennokki/befriended
-```
-
-If your Laravel version does not support package discovery, add this line in the `providers` array in your `config/app.php` file:
-
-```php
-Rennokki\Befriended\BefriendedServiceProvider::class,
 ```
 
 Publish the config file & migration files:
@@ -36,7 +31,7 @@ Migrate the database:
 $ php artisan migrate
 ```
 
-# Usage
+## 🙌 Usage
 
 The power of example is better here. This package allows you simply to assign followers, blockings or likes without too much effort. What makes the package powerful is that you can filter queries using scopes out-of-the-box.
 
@@ -388,19 +383,25 @@ $user->followerRequests(Page::class)->count(); // 1, because it has a follow req
 
 **Note: Requesting, accepting, declining or checking if following models that do not correctly implement `CanBeFollowed` and `Followable` will always return `false`.**
 
-## Contributing
+## 🐛 Testing
+
+``` bash
+vendor/bin/phpunit
+```
+
+## 🤝 Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-## Security
+## 🔒  Security
 
 If you discover any security related issues, please email alex@renoki.org instead of using the issue tracker.
 
-## Credits
+## 🎉 Credits
 
 - [Alex Renoki](https://github.com/rennokki)
 - [All Contributors](../../contributors)
 
-## License
+## 📄 License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
