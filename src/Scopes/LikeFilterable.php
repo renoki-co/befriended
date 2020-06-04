@@ -13,7 +13,11 @@ trait LikeFilterable
             return $query;
         }
 
-        $likedIds = collect($model->liking($this->getMorphClass())->get()->toArray())->pluck($model->getKeyName())->all();
+        $likedIds = $model
+            ->liking($this->getMorphClass())
+            ->get()
+            ->pluck($model->getKeyName())
+            ->toArray();
 
         return $query->whereIn($this->getKeyName(), $likedIds);
     }
@@ -24,7 +28,11 @@ trait LikeFilterable
             return $query;
         }
 
-        $likedIds = collect($model->liking($this->getMorphClass())->get()->toArray())->pluck($model->getKeyName())->all();
+        $likedIds = $model
+            ->liking($this->getMorphClass())
+            ->get()
+            ->pluck($model->getKeyName())
+            ->toArray();
 
         return $query->whereNotIn($this->getKeyName(), $likedIds);
     }

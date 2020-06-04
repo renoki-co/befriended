@@ -13,7 +13,11 @@ trait FollowFilterable
             return $query;
         }
 
-        $followingIds = collect($model->following($this->getMorphClass())->get()->toArray())->pluck($model->getKeyName())->all();
+        $followingIds = $model
+            ->following($this->getMorphClass())
+            ->get()
+            ->pluck($model->getKeyName())
+            ->toArray();
 
         return $query->whereIn($this->getKeyName(), $followingIds);
     }
@@ -24,7 +28,11 @@ trait FollowFilterable
             return $query;
         }
 
-        $followingIds = collect($model->following($this->getMorphClass())->get()->toArray())->pluck($model->getKeyName())->all();
+        $followingIds = $model
+            ->following($this->getMorphClass())
+            ->get()
+            ->pluck($model->getKeyName())
+            ->toArray();
 
         return $query->whereNotIn($this->getKeyName(), $followingIds);
     }

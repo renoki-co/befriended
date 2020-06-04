@@ -13,9 +13,15 @@ trait BlockFilterable
             return $query;
         }
 
-        $blockingsIds = collect($model->blocking($this->getMorphClass())->get()->toArray())->pluck($model->getKeyName())->all();
+        $blockingsIds = $model
+            ->blocking($this->getMorphClass())
+            ->get()
+            ->pluck($model->getKeyName())
+            ->toArray();
 
-        return $query->whereNotIn($this->getKeyName(), $blockingsIds);
+        return $query->whereNotIn(
+            $this->getKeyName(), $blockingsIds
+        );
     }
 
     public function scopeFilterBlockingsOf($query, $model)
