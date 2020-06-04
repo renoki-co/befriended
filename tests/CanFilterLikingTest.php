@@ -5,7 +5,7 @@ namespace Rennokki\Befriended\Test;
 use Rennokki\Befriended\Test\Models\Page;
 use Rennokki\Befriended\Test\Models\User;
 
-class CanFilterlikingTest extends TestCase
+class CanFilterLikingTest extends TestCase
 {
     protected $bob;
 
