@@ -3,141 +3,131 @@
 namespace Rennokki\Befriended\Test;
 
 use Rennokki\Befriended\Test\Models\Page;
+use Rennokki\Befriended\Test\Models\SimplePage;
 use Rennokki\Befriended\Test\Models\User;
 
 class LikingTest extends TestCase
 {
-    protected $user;
-    protected $user2;
-    protected $user3;
+    protected $bob;
+
+    protected $alice;
+
+    protected $mark;
+
     protected $page;
+
     protected $simplePage;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->user = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
-        $this->user2 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
-        $this->user3 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
-        $this->page = factory(\Rennokki\Befriended\Test\Models\Page::class)->create();
-        $this->simplePage = factory(\Rennokki\Befriended\Test\Models\SimplePage::class)->create();
+        $this->bob = factory(User::class)->create();
+
+        $this->alice = factory(User::class)->create();
+
+        $this->mark = factory(User::class)->create();
+
+        $this->page = factory(Page::class)->create();
+
+        $this->simplePage = factory(SimplePage::class)->create();
     }
 
-    public function testNoImplements()
+    public function test_liking()
     {
-        $this->assertFalse($this->user->like($this->simplePage));
-        $this->assertFalse($this->user->unlike($this->simplePage));
-        $this->assertFalse($this->user->isLiking($this->simplePage));
+        $this->assertTrue(
+            $this->bob->like($this->alice)
+        );
+
+        $this->assertFalse(
+            $this->bob->like($this->alice)
+        );
+
+        $this->assertTrue(
+            $this->bob->likes($this->alice)
+        );
+
+        $this->assertEquals(1, $this->bob->liking()->count());
+        $this->assertEquals(0, $this->bob->likers()->count());
+
+        $this->assertEquals(0, $this->alice->liking()->count());
+        $this->assertEquals(1, $this->alice->likers()->count());
     }
 
-    public function testNoLikedOrLiked()
+    public function test_unliking()
     {
-        $this->assertEquals($this->user->liking()->count(), 0);
-        $this->assertEquals($this->user->likers()->count(), 0);
+        $this->assertFalse(
+            $this->bob->unlike($this->alice)
+        );
 
-        $this->assertEquals($this->user2->liking()->count(), 0);
-        $this->assertEquals($this->user2->likers()->count(), 0);
+        $this->bob->like($this->alice);
 
-        $this->assertEquals($this->user3->liking()->count(), 0);
-        $this->assertEquals($this->user3->likers()->count(), 0);
+        $this->assertTrue(
+            $this->bob->unlike($this->alice)
+        );
+
+        $this->assertFalse(
+            $this->bob->likes($this->alice)
+        );
+
+        $this->assertEquals(0, $this->bob->liking()->count());
+        $this->assertEquals(0, $this->bob->likers()->count());
+
+        $this->assertEquals(0, $this->alice->liking()->count());
+        $this->assertEquals(0, $this->alice->likers()->count());
     }
 
-    public function testLikeUser()
+    public function test_liking_with_custom_model()
     {
-        $this->assertTrue($this->user->like($this->user2));
+        $this->assertTrue(
+            $this->bob->like($this->page)
+        );
 
-        $this->assertFalse($this->user->like($this->user2));
-        $this->assertTrue($this->user->isLiking($this->user2));
-        $this->assertTrue($this->user->likes($this->user2));
+        $this->assertFalse(
+            $this->bob->like($this->page)
+        );
 
-        $this->assertTrue($this->user2->like($this->user3));
-        $this->assertFalse($this->user2->like($this->user3));
-        $this->assertTrue($this->user2->isLiking($this->user3));
-        $this->assertTrue($this->user2->likes($this->user3));
+        $this->assertTrue(
+            $this->bob->likes($this->page)
+        );
 
-        $this->assertFalse($this->user->isLiking($this->user3));
-        $this->assertFalse($this->user3->isLiking($this->user2));
-        $this->assertFalse($this->user->likes($this->user3));
-        $this->assertFalse($this->user3->likes($this->user2));
+        // Not specifying the model won't return any results.
 
-        $this->assertEquals($this->user->liking()->count(), 1);
-        $this->assertEquals($this->user->likers()->count(), 0);
-        $this->assertEquals($this->user2->liking()->count(), 1);
-        $this->assertEquals($this->user2->likers()->count(), 1);
-        $this->assertEquals($this->user3->liking()->count(), 0);
-        $this->assertEquals($this->user3->likers()->count(), 1);
+        $this->assertEquals(0, $this->bob->liking()->count());
+        $this->assertEquals(0, $this->bob->likers()->count());
+
+        $this->assertEquals(0, $this->page->liking()->count());
+        $this->assertEquals(0, $this->page->likers()->count());
+
+        // Passing the model should return the values properly.
+
+        $this->assertEquals(1, $this->bob->liking(Page::class)->count());
+        $this->assertEquals(0, $this->bob->likers(Page::class)->count());
+
+        $this->assertEquals(0, $this->page->liking(User::class)->count());
+        $this->assertEquals(1, $this->page->likers(User::class)->count());
     }
 
-    public function testUnlikeUser()
+    public function test_unliking_with_custom_model()
     {
-        $this->assertFalse($this->user->unlike($this->user2));
+        $this->assertFalse(
+            $this->bob->unlike($this->page)
+        );
 
-        $this->assertTrue($this->user->like($this->user2));
-        $this->assertTrue($this->user->unlike($this->user2));
-        $this->assertFalse($this->user->isLiking($this->user2));
-        $this->assertFalse($this->user->likes($this->user2));
+        $this->bob->like($this->page);
 
-        $this->assertEquals($this->user->liking()->count(), 0);
-        $this->assertEquals($this->user->likers()->count(), 0);
-        $this->assertEquals($this->user2->liking()->count(), 0);
-        $this->assertEquals($this->user2->likers()->count(), 0);
-    }
+        $this->assertTrue(
+            $this->bob->unlike($this->page)
+        );
 
-    public function testLikeOtherModel()
-    {
-        $this->assertTrue($this->user->like($this->page));
-        $this->assertFalse($this->user->like($this->page));
-        $this->assertTrue($this->user->isLiking($this->page));
-        $this->assertTrue($this->user->likes($this->page));
+        $this->assertFalse(
+            $this->bob->likes($this->page)
+        );
 
-        $this->assertTrue($this->user2->like($this->page));
-        $this->assertTrue($this->user3->like($this->page));
+        $this->assertEquals(0, $this->bob->liking(Page::class)->count());
+        $this->assertEquals(0, $this->bob->likers(Page::class)->count());
 
-        $this->assertFalse($this->page->isLiking($this->user));
-        $this->assertFalse($this->page->isLiking($this->user2));
-        $this->assertFalse($this->page->isLiking($this->user3));
-        $this->assertFalse($this->page->likes($this->user));
-        $this->assertFalse($this->page->likes($this->user2));
-        $this->assertFalse($this->page->likes($this->user3));
-
-        $this->assertEquals($this->page->liking()->count(), 0);
-        $this->assertEquals($this->page->likers()->count(), 0);
-        $this->assertEquals($this->page->liking(User::class)->count(), 0);
-        $this->assertEquals($this->page->likers(User::class)->count(), 3);
-
-        $this->assertEquals($this->user->liking()->count(), 0);
-        $this->assertEquals($this->user->likers()->count(), 0);
-        $this->assertEquals($this->user->liking(Page::class)->count(), 1);
-        $this->assertEquals($this->user->likers(Page::class)->count(), 0);
-
-        $this->assertEquals($this->user2->liking()->count(), 0);
-        $this->assertEquals($this->user2->likers()->count(), 0);
-        $this->assertEquals($this->user2->liking(Page::class)->count(), 1);
-        $this->assertEquals($this->user2->likers(Page::class)->count(), 0);
-
-        $this->assertEquals($this->user3->liking()->count(), 0);
-        $this->assertEquals($this->user3->likers()->count(), 0);
-        $this->assertEquals($this->user3->liking(Page::class)->count(), 1);
-        $this->assertEquals($this->user3->likers(Page::class)->count(), 0);
-    }
-
-    public function testUnlikeOtherModel()
-    {
-        $this->assertFalse($this->user->unlike($this->page));
-
-        $this->assertTrue($this->user->like($this->page));
-        $this->assertTrue($this->user->unlike($this->page));
-        $this->assertFalse($this->user->isLiking($this->page));
-        $this->assertFalse($this->user->likes($this->page));
-
-        $this->assertEquals($this->user->liking()->count(), 0);
-        $this->assertEquals($this->user->likers()->count(), 0);
-        $this->assertEquals($this->user->liking(Page::class)->count(), 0);
-        $this->assertEquals($this->user->likers(Page::class)->count(), 0);
-        $this->assertEquals($this->page->liking()->count(), 0);
-        $this->assertEquals($this->page->likers()->count(), 0);
-        $this->assertEquals($this->page->liking(User::class)->count(), 0);
-        $this->assertEquals($this->page->likers(User::class)->count(), 0);
+        $this->assertEquals(0, $this->page->liking(User::class)->count());
+        $this->assertEquals(0, $this->page->likers(User::class)->count());
     }
 }

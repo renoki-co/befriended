@@ -14,10 +14,11 @@ trait CanBeLiked
     {
         $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
 
-        return $this->morphToMany($modelClass, 'likeable', 'likers', 'likeable_id', 'liker_id')
-                    ->withPivot('liker_type')
-                    ->wherePivot('liker_type', $modelClass)
-                    ->wherePivot('likeable_type', $this->getMorphClass())
-                    ->withTimestamps();
+        return $this
+            ->morphToMany($modelClass, 'likeable', 'likers', 'likeable_id', 'liker_id')
+            ->withPivot('liker_type')
+            ->wherePivot('liker_type', $modelClass)
+            ->wherePivot('likeable_type', $this->getMorphClass())
+            ->withTimestamps();
     }
 }

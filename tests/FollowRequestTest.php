@@ -3,218 +3,236 @@
 namespace Rennokki\Befriended\Test;
 
 use Rennokki\Befriended\Test\Models\Page;
+use Rennokki\Befriended\Test\Models\SimplePage;
 use Rennokki\Befriended\Test\Models\User;
 
 class FollowRequestTest extends TestCase
 {
-    protected $user;
-    protected $user2;
-    protected $user3;
+    protected $bob;
+
+    protected $alice;
+
+    protected $mark;
+
     protected $page;
+
     protected $simplePage;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->user = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
-        $this->user2 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
-        $this->user3 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
-        $this->page = factory(\Rennokki\Befriended\Test\Models\Page::class)->create();
-        $this->simplePage = factory(\Rennokki\Befriended\Test\Models\SimplePage::class)->create();
+        $this->bob = factory(User::class)->create();
+
+        $this->alice = factory(User::class)->create();
+
+        $this->mark = factory(User::class)->create();
+
+        $this->page = factory(Page::class)->create();
+
+        $this->simplePage = factory(SimplePage::class)->create();
     }
 
-    public function testNoImplements()
+    public function test_follow_request_to_user()
     {
-        $this->assertFalse($this->user->hasFollowRequested($this->simplePage));
+        $this->assertTrue(
+            $this->bob->followRequest($this->alice)
+        );
+
+        $this->assertFalse(
+            $this->bob->followRequest($this->alice)
+        );
+
+        $this->assertFalse(
+            $this->bob->follows($this->alice)
+        );
+
+        $this->assertTrue(
+            $this->bob->hasFollowRequested($this->alice)
+        );
+
+        $this->assertTrue(
+            $this->alice->hasFollowRequestFrom($this->bob)
+        );
+
+        $this->assertEquals(1, $this->bob->followRequests()->count());
+        $this->assertEquals(1, $this->alice->followerRequests()->count());
     }
 
-    public function testNoFollowRequestsOrFollowerRequests()
+    public function test_accept_follow_request()
     {
-        $this->assertEquals($this->user->followRequests()->count(), 0);
-        $this->assertEquals($this->user->followerRequests()->count(), 0);
+        $this->assertFalse(
+            $this->alice->acceptFollowRequest($this->bob)
+        );
 
-        $this->assertEquals($this->user2->followRequests()->count(), 0);
-        $this->assertEquals($this->user2->followerRequests()->count(), 0);
+        $this->bob->followRequest($this->alice);
 
-        $this->assertEquals($this->user3->followRequests()->count(), 0);
-        $this->assertEquals($this->user3->followerRequests()->count(), 0);
+        $this->assertTrue(
+            $this->alice->acceptFollowRequest($this->bob)
+        );
+
+        $this->assertFalse(
+            $this->alice->acceptFollowRequest($this->bob)
+        );
+
+        $this->assertTrue(
+            $this->bob->follows($this->alice)
+        );
+
+        $this->assertEquals(0, $this->bob->followerRequests()->count());
+        $this->assertEquals(0, $this->alice->followRequests()->count());
     }
 
-    public function testFollowRequestUser()
+    public function test_decline_follow_request()
     {
-        $this->assertTrue($this->user->followRequest($this->user2));
+        $this->assertFalse(
+            $this->alice->declineFollowRequest($this->bob)
+        );
 
-        $this->assertFalse($this->user->followRequest($this->user2));
-        $this->assertTrue($this->user->hasFollowRequested($this->user2));
-        $this->assertFalse($this->user->follows($this->user2));
-        $this->assertTrue($this->user2->hasFollowRequestFrom($this->user));
+        $this->bob->followRequest($this->alice);
 
-        $this->assertTrue($this->user2->followRequest($this->user3));
-        $this->assertFalse($this->user2->followRequest($this->user3));
-        $this->assertFalse($this->user2->isFollowing($this->user3));
-        $this->assertFalse($this->user2->follows($this->user3));
-        $this->assertFalse($this->user->hasFollowRequestFrom($this->user2));
+        $this->assertTrue(
+            $this->alice->declineFollowRequest($this->bob)
+        );
 
-        $this->assertFalse($this->user->isFollowing($this->user3));
-        $this->assertFalse($this->user3->isFollowing($this->user2));
-        $this->assertFalse($this->user->follows($this->user3));
-        $this->assertFalse($this->user3->follows($this->user2));
-        $this->assertFalse($this->user->hasFollowRequested($this->user3));
-        $this->assertTrue($this->user3->hasFollowRequestFrom($this->user2));
+        $this->assertFalse(
+            $this->alice->declineFollowRequest($this->bob)
+        );
 
-        $this->assertEquals($this->user->followRequests()->count(), 1);
-        $this->assertEquals($this->user->followerRequests()->count(), 0);
-        $this->assertEquals($this->user2->followRequests()->count(), 1);
-        $this->assertEquals($this->user2->followerRequests()->count(), 1);
-        $this->assertEquals($this->user3->followRequests()->count(), 0);
-        $this->assertEquals($this->user3->followerRequests()->count(), 1);
+        $this->assertFalse(
+            $this->bob->follows($this->alice)
+        );
+
+        $this->assertEquals(0, $this->bob->followerRequests()->count());
+        $this->assertEquals(0, $this->alice->followRequests()->count());
     }
 
-    public function testAcceptFollowRequestUser()
+    public function test_cancel_follower_request()
     {
-        $this->assertFalse($this->user->acceptFollowRequest($this->user2));
+        $this->assertFalse(
+            $this->bob->cancelFollowRequest($this->alice)
+        );
 
-        $this->assertTrue($this->user->followRequest($this->user2));
-        $this->assertTrue($this->user2->acceptFollowRequest($this->user));
-        $this->assertTrue($this->user->isFollowing($this->user2));
-        $this->assertTrue($this->user->unfollow($this->user2));
-        $this->assertFalse($this->user->isFollowing($this->user2));
-        $this->assertFalse($this->user->follows($this->user2));
+        $this->bob->followRequest($this->alice);
 
-        $this->assertEquals($this->user->following()->count(), 0);
-        $this->assertEquals($this->user->followRequests()->count(), 0);
-        $this->assertEquals($this->user2->followers()->count(), 0);
-        $this->assertEquals($this->user2->followerRequests()->count(), 0);
+        $this->assertTrue(
+            $this->bob->cancelFollowRequest($this->alice)
+        );
+
+        $this->assertFalse(
+            $this->bob->declineFollowRequest($this->alice)
+        );
+
+        $this->assertFalse(
+            $this->bob->follows($this->alice)
+        );
+
+        $this->assertEquals(0, $this->bob->followerRequests()->count());
+        $this->assertEquals(0, $this->alice->followRequests()->count());
     }
 
-    public function testFollowRequestedUser()
+    public function test_follow_request_to_custom_model()
     {
-        $this->assertTrue($this->user->followRequest($this->user2));
-        $this->assertTrue($this->user->follow($this->user2));
-        $this->assertFalse($this->user2->acceptFollowRequest($this->user));
-        $this->assertTrue($this->user->isFollowing($this->user2));
+        $this->assertTrue(
+            $this->bob->followRequest($this->page)
+        );
 
-        $this->assertEquals($this->user->following()->count(), 1);
-        $this->assertEquals($this->user->followRequests()->count(), 0);
-        $this->assertEquals($this->user2->followers()->count(), 1);
-        $this->assertEquals($this->user2->followerRequests()->count(), 0);
+        $this->assertFalse(
+            $this->bob->followRequest($this->page)
+        );
+
+        $this->assertFalse(
+            $this->bob->follows($this->page)
+        );
+
+        $this->assertTrue(
+            $this->bob->hasFollowRequested($this->page)
+        );
+
+        $this->assertTrue(
+            $this->page->hasFollowRequestFrom($this->bob)
+        );
+
+        // Not specifying the model won't return any results.
+
+        $this->assertEquals(0, $this->bob->followRequests()->count());
+        $this->assertEquals(0, $this->page->followerRequests()->count());
+
+        // Not specifying the model won't return any results.
+
+        $this->assertEquals(1, $this->bob->followRequests(Page::class)->count());
+        $this->assertEquals(1, $this->page->followerRequests(User::class)->count());
     }
 
-    public function testDeclineFollowRequestUser()
+    public function test_accept_follow_request_from_custom_model()
     {
-        $this->assertFalse($this->user->declineFollowRequest($this->user2));
+        $this->assertFalse(
+            $this->page->acceptFollowRequest($this->bob)
+        );
 
-        $this->assertTrue($this->user->followRequest($this->user2));
-        $this->assertTrue($this->user2->declineFollowRequest($this->user));
-        $this->assertFalse($this->user->isFollowing($this->user2));
-        $this->assertFalse($this->user->follows($this->user2));
+        $this->bob->followRequest($this->page);
 
-        $this->assertEquals($this->user->following()->count(), 0);
-        $this->assertEquals($this->user->followRequests()->count(), 0);
-        $this->assertEquals($this->user2->followers()->count(), 0);
-        $this->assertEquals($this->user2->followerRequests()->count(), 0);
+        $this->assertTrue(
+            $this->page->acceptFollowRequest($this->bob)
+        );
+
+        $this->assertFalse(
+            $this->page->acceptFollowRequest($this->bob)
+        );
+
+        $this->assertTrue(
+            $this->bob->follows($this->page)
+        );
+
+        $this->assertEquals(0, $this->bob->followerRequests(Page::class)->count());
+        $this->assertEquals(0, $this->page->followRequests(User::class)->count());
     }
 
-    public function testCancelFollowRequestUser()
+    public function test_decline_follow_request_from_custom_model()
     {
-        $this->assertFalse($this->user->cancelFollowRequest($this->user2));
+        $this->assertFalse(
+            $this->page->declineFollowRequest($this->bob)
+        );
 
-        $this->assertTrue($this->user->followRequest($this->user2));
-        $this->assertTrue($this->user->cancelFollowRequest($this->user2));
-        $this->assertFalse($this->user->isFollowing($this->user2));
+        $this->bob->followRequest($this->page);
 
-        $this->assertEquals($this->user2->followRequests()->count(), 0);
-        $this->assertEquals($this->user2->followers()->count(), 0);
+        $this->assertTrue(
+            $this->page->declineFollowRequest($this->bob)
+        );
+
+        $this->assertFalse(
+            $this->page->declineFollowRequest($this->bob)
+        );
+
+        $this->assertFalse(
+            $this->bob->follows($this->page)
+        );
+
+        $this->assertEquals(0, $this->bob->followerRequests(Page::class)->count());
+        $this->assertEquals(0, $this->page->followRequests(User::class)->count());
     }
 
-    public function testFollowRequestOtherModel()
+    public function test_cancel_follower_request_from_custom_model()
     {
-        $this->assertTrue($this->user->followRequest($this->page));
-        $this->assertFalse($this->user->followRequest($this->page));
-        $this->assertTrue($this->user->hasFollowRequested($this->page));
-        $this->assertFalse($this->user->isFollowing($this->page));
-        $this->assertFalse($this->user->follows($this->page));
+        $this->assertFalse(
+            $this->bob->cancelFollowRequest($this->page)
+        );
 
-        $this->assertTrue($this->user2->followRequest($this->page));
-        $this->assertTrue($this->user3->followRequest($this->page));
+        $this->bob->followRequest($this->page);
 
-        $this->assertFalse($this->page->isFollowing($this->user));
-        $this->assertFalse($this->page->isFollowing($this->user2));
-        $this->assertFalse($this->page->isFollowing($this->user3));
-        $this->assertFalse($this->page->follows($this->user));
-        $this->assertFalse($this->page->follows($this->user2));
-        $this->assertFalse($this->page->follows($this->user3));
+        $this->assertTrue(
+            $this->bob->cancelFollowRequest($this->page)
+        );
 
-        $this->assertEquals($this->page->followRequests()->count(), 0);
-        $this->assertEquals($this->page->followerRequests()->count(), 0);
-        $this->assertEquals($this->page->followRequests(User::class)->count(), 0);
-        $this->assertEquals($this->page->followerRequests(User::class)->count(), 3);
+        $this->assertFalse(
+            $this->bob->declineFollowRequest($this->page)
+        );
 
-        $this->assertEquals($this->user->followRequests()->count(), 0);
-        $this->assertEquals($this->user->followerRequests()->count(), 0);
-        $this->assertEquals($this->user->followRequests(Page::class)->count(), 1);
-        $this->assertEquals($this->user->followerRequests(Page::class)->count(), 0);
+        $this->assertFalse(
+            $this->bob->follows($this->page)
+        );
 
-        $this->assertEquals($this->user2->followRequests()->count(), 0);
-        $this->assertEquals($this->user2->followerRequests()->count(), 0);
-        $this->assertEquals($this->user2->followRequests(Page::class)->count(), 1);
-        $this->assertEquals($this->user2->followerRequests(Page::class)->count(), 0);
-
-        $this->assertEquals($this->user3->followRequests()->count(), 0);
-        $this->assertEquals($this->user3->followerRequests()->count(), 0);
-        $this->assertEquals($this->user3->followRequests(Page::class)->count(), 1);
-        $this->assertEquals($this->user3->followerRequests(Page::class)->count(), 0);
-    }
-
-    public function testCancelFollowRequestOtherModel()
-    {
-        $this->assertFalse($this->user->cancelFollowRequest($this->page));
-
-        $this->assertTrue($this->user->followRequest($this->page));
-        $this->assertTrue($this->user->cancelFollowRequest($this->page));
-        $this->assertFalse($this->user->hasFollowRequested($this->page));
-
-        $this->assertEquals($this->user->followRequests()->count(), 0);
-        $this->assertEquals($this->user->followerRequests()->count(), 0);
-        $this->assertEquals($this->user->followRequests(Page::class)->count(), 0);
-        $this->assertEquals($this->user->followerRequests(Page::class)->count(), 0);
-
-        $this->assertEquals($this->page->followRequests()->count(), 0);
-        $this->assertEquals($this->page->followerRequests()->count(), 0);
-        $this->assertEquals($this->page->followRequests(User::class)->count(), 0);
-        $this->assertEquals($this->page->followerRequests(User::class)->count(), 0);
-    }
-
-    public function testAcceptFollowRequestOtherModels()
-    {
-        $this->assertFalse($this->user->acceptFollowRequest($this->page));
-
-        $this->assertTrue($this->user->followRequest($this->page));
-        $this->assertTrue($this->page->acceptFollowRequest($this->user));
-        $this->assertTrue($this->user->isFollowing($this->page));
-        $this->assertTrue($this->user->unfollow($this->page));
-        $this->assertFalse($this->user->isFollowing($this->page));
-        $this->assertFalse($this->user->follows($this->page));
-
-        $this->assertEquals($this->user->following()->count(), 0);
-        $this->assertEquals($this->user->followRequests()->count(), 0);
-        $this->assertEquals($this->page->followers()->count(), 0);
-        $this->assertEquals($this->page->followerRequests()->count(), 0);
-    }
-
-    public function testDeclineFollowRequestOtherModels()
-    {
-        $this->assertFalse($this->user->declineFollowRequest($this->page));
-
-        $this->assertTrue($this->user->followRequest($this->page));
-        $this->assertTrue($this->page->declineFollowRequest($this->user));
-        $this->assertFalse($this->user->isFollowing($this->page));
-        $this->assertFalse($this->user->follows($this->page));
-
-        $this->assertEquals($this->user->following()->count(), 0);
-        $this->assertEquals($this->user->followRequests()->count(), 0);
-        $this->assertEquals($this->page->followers()->count(), 0);
-        $this->assertEquals($this->page->followerRequests()->count(), 0);
+        $this->assertEquals(0, $this->bob->followerRequests(Page::class)->count());
+        $this->assertEquals(0, $this->page->followRequests(User::class)->count());
     }
 }

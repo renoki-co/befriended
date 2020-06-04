@@ -18,8 +18,10 @@ use Rennokki\Befriended\Traits\CanLike;
 
 class Page extends Model implements Following, Blocking, Liking
 {
-    use CanFollow, CanBeFollowed, CanBlock, CanBeBlocked, CanLike, CanBeLiked,
-    LikeFilterable, BlockFilterable, FollowFilterable;
+    use CanFollow, CanBeFollowed,
+        CanBlock, CanBeBlocked,
+        CanLike, CanBeLiked,
+        LikeFilterable, BlockFilterable, FollowFilterable;
 
     protected $fillable = [
         'name',

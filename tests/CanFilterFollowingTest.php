@@ -3,45 +3,64 @@
 namespace Rennokki\Befriended\Test;
 
 use Rennokki\Befriended\Test\Models\Page;
+use Rennokki\Befriended\Test\Models\User;
 
 class CanFilterFollowingTest extends TestCase
 {
-    protected $user;
-    protected $user2;
-    protected $user3;
-    protected $page;
+    protected $bob;
+
+    protected $alice;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->user = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
-        $this->user2 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
+        $this->bob = factory(User::class)->create();
 
-        factory(\Rennokki\Befriended\Test\Models\Page::class, 10)->create();
+        $this->alice = factory(User::class)->create();
+
+        factory(Page::class, 10)->create();
     }
 
-    public function testCanFilterFollowings()
+    public function test_filters_followed_pages()
     {
-        $this->assertEquals(Page::filterFollowingsOf($this->user)->count(), 0);
-        $this->assertEquals(Page::filterFollowingsOf($this->user2)->count(), 0);
+        $this->assertEquals(
+            0, Page::filterFollowingsOf($this->bob)->count()
+        );
 
-        $this->user->follow(Page::find(1));
-        $this->user->follow(Page::find(2));
+        $this->assertEquals(
+            0, Page::filterFollowingsOf($this->alice)->count()
+        );
 
-        $this->assertEquals(Page::filterFollowingsOf($this->user)->count(), 2);
-        $this->assertEquals(Page::filterFollowingsOf($this->user2)->count(), 0);
+        $this->bob->follow(Page::find(1));
+
+        $this->assertEquals(
+            1, Page::filterFollowingsOf($this->bob)->count()
+        );
+
+        $this->assertEquals(
+            0, Page::filterFollowingsOf($this->alice)->count()
+        );
     }
 
-    public function testCanFilterNonFollowings()
+    public function test_filters_non_followed_pages()
     {
-        $this->assertEquals(Page::filterUnfollowingsOf($this->user)->count(), 10);
-        $this->assertEquals(Page::filterUnfollowingsOf($this->user2)->count(), 10);
+        $this->assertEquals(
+            10, Page::filterUnfollowingsOf($this->bob)->count()
+        );
 
-        $this->user->follow(Page::find(1));
-        $this->user->follow(Page::find(2));
+        $this->assertEquals(
+            10, Page::filterUnfollowingsOf($this->alice)->count()
+        );
 
-        $this->assertEquals(Page::filterUnfollowingsOf($this->user)->count(), 8);
-        $this->assertEquals(Page::filterUnfollowingsOf($this->user2)->count(), 10);
+        $this->bob->follow(Page::find(1));
+
+        $this->assertEquals(
+            9, Page::filterUnfollowingsOf($this->bob)->count()
+        );
+
+        $this->assertEquals(
+            10, Page::filterUnfollowingsOf($this->alice)->count()
+        );
     }
 }

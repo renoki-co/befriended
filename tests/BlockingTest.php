@@ -3,142 +3,131 @@
 namespace Rennokki\Befriended\Test;
 
 use Rennokki\Befriended\Test\Models\Page;
+use Rennokki\Befriended\Test\Models\SimplePage;
 use Rennokki\Befriended\Test\Models\User;
 
 class BlockingTest extends TestCase
 {
-    protected $user;
-    protected $user2;
-    protected $user3;
+    protected $bob;
+
+    protected $alice;
+
+    protected $mark;
+
     protected $page;
+
     protected $simplePage;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->user = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
-        $this->user2 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
-        $this->user3 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
-        $this->page = factory(\Rennokki\Befriended\Test\Models\Page::class)->create();
-        $this->simplePage = factory(\Rennokki\Befriended\Test\Models\SimplePage::class)->create();
+        $this->bob = factory(User::class)->create();
+
+        $this->alice = factory(User::class)->create();
+
+        $this->mark = factory(User::class)->create();
+
+        $this->page = factory(Page::class)->create();
+
+        $this->simplePage = factory(SimplePage::class)->create();
     }
 
-    public function testNoImplements()
+    public function test_blocking()
     {
-        $this->assertFalse($this->user->block($this->simplePage));
-        $this->assertFalse($this->user->unblock($this->simplePage));
-        $this->assertFalse($this->user->isBlocking($this->simplePage));
-        $this->assertFalse($this->user->blocks($this->simplePage));
+        $this->assertTrue(
+            $this->bob->block($this->alice)
+        );
+
+        $this->assertFalse(
+            $this->bob->block($this->alice)
+        );
+
+        $this->assertTrue(
+            $this->bob->blocks($this->alice)
+        );
+
+        $this->assertEquals(1, $this->bob->blocking()->count());
+        $this->assertEquals(0, $this->bob->blockers()->count());
+
+        $this->assertEquals(0, $this->alice->blocking()->count());
+        $this->assertEquals(1, $this->alice->blockers()->count());
     }
 
-    public function testNoBlockedOrBlocked()
+    public function test_unblocking()
     {
-        $this->assertEquals($this->user->blocking()->count(), 0);
-        $this->assertEquals($this->user->blockers()->count(), 0);
+        $this->assertFalse(
+            $this->bob->unblock($this->alice)
+        );
 
-        $this->assertEquals($this->user2->blocking()->count(), 0);
-        $this->assertEquals($this->user2->blockers()->count(), 0);
+        $this->bob->block($this->alice);
 
-        $this->assertEquals($this->user3->blocking()->count(), 0);
-        $this->assertEquals($this->user3->blockers()->count(), 0);
+        $this->assertTrue(
+            $this->bob->unblock($this->alice)
+        );
+
+        $this->assertFalse(
+            $this->bob->blocks($this->alice)
+        );
+
+        $this->assertEquals(0, $this->bob->blocking()->count());
+        $this->assertEquals(0, $this->bob->blockers()->count());
+
+        $this->assertEquals(0, $this->alice->blocking()->count());
+        $this->assertEquals(0, $this->alice->blockers()->count());
     }
 
-    public function testblockUser()
+    public function test_blocking_with_custom_model()
     {
-        $this->assertTrue($this->user->block($this->user2));
+        $this->assertTrue(
+            $this->bob->block($this->page)
+        );
 
-        $this->assertFalse($this->user->block($this->user2));
-        $this->assertTrue($this->user->isBlocking($this->user2));
-        $this->assertTrue($this->user->blocks($this->user2));
+        $this->assertFalse(
+            $this->bob->block($this->page)
+        );
 
-        $this->assertTrue($this->user2->block($this->user3));
-        $this->assertFalse($this->user2->block($this->user3));
-        $this->assertTrue($this->user2->isBlocking($this->user3));
-        $this->assertTrue($this->user2->blocks($this->user3));
+        $this->assertTrue(
+            $this->bob->blocks($this->page)
+        );
 
-        $this->assertFalse($this->user->isBlocking($this->user3));
-        $this->assertFalse($this->user3->isBlocking($this->user2));
-        $this->assertFalse($this->user->blocks($this->user3));
-        $this->assertFalse($this->user3->blocks($this->user2));
+        // Not specifying the model won't return any results.
 
-        $this->assertEquals($this->user->blocking()->count(), 1);
-        $this->assertEquals($this->user->blockers()->count(), 0);
-        $this->assertEquals($this->user2->blocking()->count(), 1);
-        $this->assertEquals($this->user2->blockers()->count(), 1);
-        $this->assertEquals($this->user3->blocking()->count(), 0);
-        $this->assertEquals($this->user3->blockers()->count(), 1);
+        $this->assertEquals(0, $this->bob->blocking()->count());
+        $this->assertEquals(0, $this->bob->blockers()->count());
+
+        $this->assertEquals(0, $this->page->blocking()->count());
+        $this->assertEquals(0, $this->page->blockers()->count());
+
+        // Passing the model should return the values properly.
+
+        $this->assertEquals(1, $this->bob->blocking(Page::class)->count());
+        $this->assertEquals(0, $this->bob->blockers(Page::class)->count());
+
+        $this->assertEquals(0, $this->page->blocking(User::class)->count());
+        $this->assertEquals(1, $this->page->blockers(User::class)->count());
     }
 
-    public function testUnblockUser()
+    public function test_unblocking_with_custom_model()
     {
-        $this->assertFalse($this->user->unblock($this->user2));
+        $this->assertFalse(
+            $this->bob->unblock($this->page)
+        );
 
-        $this->assertTrue($this->user->block($this->user2));
-        $this->assertTrue($this->user->unblock($this->user2));
-        $this->assertFalse($this->user->isBlocking($this->user2));
-        $this->assertFalse($this->user->blocks($this->user2));
+        $this->bob->block($this->page);
 
-        $this->assertEquals($this->user->blocking()->count(), 0);
-        $this->assertEquals($this->user->blockers()->count(), 0);
-        $this->assertEquals($this->user2->blocking()->count(), 0);
-        $this->assertEquals($this->user2->blockers()->count(), 0);
-    }
+        $this->assertTrue(
+            $this->bob->unblock($this->page)
+        );
 
-    public function testblockOtherModel()
-    {
-        $this->assertTrue($this->user->block($this->page));
-        $this->assertFalse($this->user->block($this->page));
-        $this->assertTrue($this->user->isBlocking($this->page));
-        $this->assertTrue($this->user->blocks($this->page));
+        $this->assertFalse(
+            $this->bob->blocks($this->page)
+        );
 
-        $this->assertTrue($this->user2->block($this->page));
-        $this->assertTrue($this->user3->block($this->page));
+        $this->assertEquals(0, $this->bob->blocking(Page::class)->count());
+        $this->assertEquals(0, $this->bob->blockers(Page::class)->count());
 
-        $this->assertFalse($this->page->isBlocking($this->user));
-        $this->assertFalse($this->page->isBlocking($this->user2));
-        $this->assertFalse($this->page->isBlocking($this->user3));
-        $this->assertFalse($this->page->blocks($this->user));
-        $this->assertFalse($this->page->blocks($this->user2));
-        $this->assertFalse($this->page->blocks($this->user3));
-
-        $this->assertEquals($this->page->blocking()->count(), 0);
-        $this->assertEquals($this->page->blockers()->count(), 0);
-        $this->assertEquals($this->page->blocking(User::class)->count(), 0);
-        $this->assertEquals($this->page->blockers(User::class)->count(), 3);
-
-        $this->assertEquals($this->user->blocking()->count(), 0);
-        $this->assertEquals($this->user->blockers()->count(), 0);
-        $this->assertEquals($this->user->blocking(Page::class)->count(), 1);
-        $this->assertEquals($this->user->blockers(Page::class)->count(), 0);
-
-        $this->assertEquals($this->user2->blocking()->count(), 0);
-        $this->assertEquals($this->user2->blockers()->count(), 0);
-        $this->assertEquals($this->user2->blocking(Page::class)->count(), 1);
-        $this->assertEquals($this->user2->blockers(Page::class)->count(), 0);
-
-        $this->assertEquals($this->user3->blocking()->count(), 0);
-        $this->assertEquals($this->user3->blockers()->count(), 0);
-        $this->assertEquals($this->user3->blocking(Page::class)->count(), 1);
-        $this->assertEquals($this->user3->blockers(Page::class)->count(), 0);
-    }
-
-    public function testUnblockOtherModel()
-    {
-        $this->assertFalse($this->user->unblock($this->page));
-
-        $this->assertTrue($this->user->block($this->page));
-        $this->assertTrue($this->user->unblock($this->page));
-        $this->assertFalse($this->user->isBlocking($this->page));
-        $this->assertFalse($this->user->blocks($this->page));
-
-        $this->assertEquals($this->user->blocking()->count(), 0);
-        $this->assertEquals($this->user->blockers()->count(), 0);
-        $this->assertEquals($this->user->blocking(Page::class)->count(), 0);
-        $this->assertEquals($this->user->blockers(Page::class)->count(), 0);
-        $this->assertEquals($this->page->blocking()->count(), 0);
-        $this->assertEquals($this->page->blockers()->count(), 0);
-        $this->assertEquals($this->page->blocking(User::class)->count(), 0);
-        $this->assertEquals($this->page->blockers(User::class)->count(), 0);
+        $this->assertEquals(0, $this->page->blocking(User::class)->count());
+        $this->assertEquals(0, $this->page->blockers(User::class)->count());
     }
 }

@@ -3,45 +3,64 @@
 namespace Rennokki\Befriended\Test;
 
 use Rennokki\Befriended\Test\Models\Page;
+use Rennokki\Befriended\Test\Models\User;
 
 class CanFilterLikingTest extends TestCase
 {
-    protected $user;
-    protected $user2;
-    protected $user3;
-    protected $page;
+    protected $bob;
+
+    protected $alice;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->user = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
-        $this->user2 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
+        $this->bob = factory(User::class)->create();
 
-        factory(\Rennokki\Befriended\Test\Models\Page::class, 10)->create();
+        $this->alice = factory(User::class)->create();
+
+        factory(Page::class, 10)->create();
     }
 
-    public function testCanFilterLikes()
+    public function test_filters_liked_pages()
     {
-        $this->assertEquals(Page::likedBy($this->user)->count(), 0);
-        $this->assertEquals(Page::likedBy($this->user2)->count(), 0);
+        $this->assertEquals(
+            0, Page::likedBy($this->bob)->count()
+        );
 
-        $this->user->like(Page::find(1));
-        $this->user->like(Page::find(2));
+        $this->assertEquals(
+            0, Page::likedBy($this->alice)->count()
+        );
 
-        $this->assertEquals(Page::likedBy($this->user)->count(), 2);
-        $this->assertEquals(Page::likedBy($this->user2)->count(), 0);
+        $this->bob->like(Page::find(1));
+
+        $this->assertEquals(
+            1, Page::likedBy($this->bob)->count()
+        );
+
+        $this->assertEquals(
+            0, Page::likedBy($this->alice)->count()
+        );
     }
 
-    public function testCanFilterNonLikes()
+    public function test_filters_non_liked_pages()
     {
-        $this->assertEquals(Page::filterUnlikedFor($this->user)->count(), 10);
-        $this->assertEquals(Page::filterUnlikedFor($this->user2)->count(), 10);
+        $this->assertEquals(
+            10, Page::filterUnlikedFor($this->bob)->count()
+        );
 
-        $this->user->like(Page::find(1));
-        $this->user->like(Page::find(2));
+        $this->assertEquals(
+            10, Page::filterUnlikedFor($this->alice)->count()
+        );
 
-        $this->assertEquals(Page::filterUnlikedFor($this->user)->count(), 8);
-        $this->assertEquals(Page::filterUnlikedFor($this->user2)->count(), 10);
+        $this->bob->like(Page::find(1));
+
+        $this->assertEquals(
+            9, Page::filterUnlikedFor($this->bob)->count()
+        );
+
+        $this->assertEquals(
+            10, Page::filterUnlikedFor($this->alice)->count()
+        );
     }
 }

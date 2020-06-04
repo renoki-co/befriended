@@ -17,12 +17,13 @@ trait CanFollow
     {
         $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
 
-        return $this->morphToMany($modelClass, 'follower', 'followers', 'follower_id', 'followable_id')
-                    ->withPivot(['followable_type', 'accepted'])
-                    ->wherePivot('followable_type', $modelClass)
-                    ->wherePivot('follower_type', $this->getMorphClass())
-                    ->wherePivot('accepted', true)
-                    ->withTimestamps();
+        return $this
+            ->morphToMany($modelClass, 'follower', 'followers', 'follower_id', 'followable_id')
+            ->withPivot(['followable_type', 'accepted'])
+            ->wherePivot('followable_type', $modelClass)
+            ->wherePivot('follower_type', $this->getMorphClass())
+            ->wherePivot('accepted', true)
+            ->withTimestamps();
     }
 
     /**
@@ -37,7 +38,11 @@ trait CanFollow
             return false;
         }
 
-        return ! is_null($this->following((new $model)->getMorphClass())->find($model->getKey()));
+        return ! is_null(
+            $this
+                ->following((new $model)->getMorphClass())
+                ->find($model->getKey())
+        );
     }
 
     /**
@@ -68,7 +73,11 @@ trait CanFollow
         }
 
         if ($this->hasFollowRequested($model)) {
-            $this->followRequests((new $model)->getMorphClass())->find($model->getKey())->pivot->update(['accepted' => true]);
+            $this
+                ->followRequests((new $model)->getMorphClass())
+                ->find($model->getKey())
+                ->pivot
+                ->update(['accepted' => true]);
         } else {
             $this->following()->attach($model->getKey(), [
                 'followable_type' => (new $model)->getMorphClass(),
@@ -94,7 +103,9 @@ trait CanFollow
             return false;
         }
 
-        return (bool) $this->following((new $model)->getMorphClass())->detach($model->getKey());
+        return (bool) $this
+            ->following((new $model)->getMorphClass())
+            ->detach($model->getKey());
     }
 
     /**
@@ -107,7 +118,8 @@ trait CanFollow
     {
         $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
 
-        return $this->morphToMany($modelClass, 'follower', 'followers', 'follower_id', 'followable_id')
+        return $this
+            ->morphToMany($modelClass, 'follower', 'followers', 'follower_id', 'followable_id')
             ->withPivot(['followable_type', 'accepted'])
             ->wherePivot('followable_type', $modelClass)
             ->wherePivot('follower_type', $this->getMorphClass())
@@ -127,7 +139,11 @@ trait CanFollow
             return false;
         }
 
-        return ! is_null($this->followRequests((new $model)->getMorphClass())->find($model->getKey()));
+        return ! is_null(
+            $this
+                ->followRequests((new $model)->getMorphClass())
+                ->find($model->getKey())
+        );
     }
 
     /**
@@ -174,6 +190,8 @@ trait CanFollow
             return false;
         }
 
-        return (bool) $this->followRequests((new $model)->getMorphClass())->detach($model->getKey());
+        return (bool) $this
+            ->followRequests((new $model)->getMorphClass())
+            ->detach($model->getKey());
     }
 }
