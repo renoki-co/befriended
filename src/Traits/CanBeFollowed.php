@@ -44,6 +44,21 @@ trait CanBeFollowed
     }
 
     /**
+     * Remove a follower from this model.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return bool
+     */
+    public function revokeFollower($model): bool
+    {
+        if (! $model instanceof Follower && ! $model instanceof Following) {
+            return false;
+        }
+
+        return $model->unfollow($this);
+    }
+
+    /**
      * Check if the model has requested to follow the current model.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model

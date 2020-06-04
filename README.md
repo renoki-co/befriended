@@ -126,6 +126,14 @@ $user->isFollowing($friend);
 $user->follows($friend); // alias
 ```
 
+Some users might want to remove followers from their list. The `Followable` trait comes with a `revokeFollower` method:
+
+```php
+$friend->follow($user);
+
+$user->revokeFollower($friend);
+```
+
 **Note: Following, unfollowing or checking if following models that do not correctly implement `CanBeFollowed` and `Followable` will always return `false`.**
 
 ### Filtering followed/unfollowed models

@@ -21,6 +21,14 @@ interface Followable
     public function followerRequests($model = null);
 
     /**
+     * Remove a follower from a model.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return bool
+     */
+    public function revokeFollower($model): bool;
+
+    /**
      * Check if the model has requested to follow the current model.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
