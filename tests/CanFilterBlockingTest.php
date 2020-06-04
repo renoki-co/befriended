@@ -3,33 +3,43 @@
 namespace Rennokki\Befriended\Test;
 
 use Rennokki\Befriended\Test\Models\Page;
+use Rennokki\Befriended\Test\Models\User;
 
 class CanFilterBlockingTest extends TestCase
 {
-    protected $user;
-    protected $user2;
-    protected $user3;
-    protected $page;
+    protected $bob;
+
+    protected $alice;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->user = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
-        $this->user2 = factory(\Rennokki\Befriended\Test\Models\User::class)->create();
+        $this->bob = factory(User::class)->create();
 
-        factory(\Rennokki\Befriended\Test\Models\Page::class, 10)->create();
+        $this->alice = factory(User::class)->create();
+
+        factory(Page::class, 10)->create();
     }
 
-    public function testCanFilterBlockers()
+    public function test_can_filter_blockers()
     {
-        $this->assertEquals(Page::filterBlockingsOf($this->user)->count(), 10);
-        $this->assertEquals(Page::filterBlockingsOf($this->user2)->count(), 10);
+        $this->assertEquals(
+            10, Page::filterBlockingsOf($this->bob)->count()
+        );
 
-        $this->user->block(Page::find(1));
-        $this->user->block(Page::find(2));
+        $this->assertEquals(
+            10, Page::filterBlockingsOf($this->alice)->count()
+        );
 
-        $this->assertEquals(Page::filterBlockingsOf($this->user)->count(), 8);
-        $this->assertEquals(Page::filterBlockingsOf($this->user2)->count(), 10);
+        $this->bob->block(Page::find(1));
+
+        $this->assertEquals(
+            9, Page::filterBlockingsOf($this->bob)->count()
+        );
+
+        $this->assertEquals(
+            10, Page::filterBlockingsOf($this->alice)->count()
+        );
     }
 }
