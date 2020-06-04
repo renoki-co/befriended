@@ -6,7 +6,7 @@ use Rennokki\Befriended\Test\Models\Page;
 use Rennokki\Befriended\Test\Models\SimplePage;
 use Rennokki\Befriended\Test\Models\User;
 
-class likeTest extends TestCase
+class LikingTest extends TestCase
 {
     protected $bob;
 
