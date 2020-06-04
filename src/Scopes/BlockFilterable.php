@@ -7,6 +7,13 @@ use Rennokki\Befriended\Contracts\Blocking;
 
 trait BlockFilterable
 {
+    /**
+     * Evict any records that the model blocked.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeWithoutBlockingsOf($query, $model)
     {
         if (! $model instanceof Blocker && ! $model instanceof Blocking) {
@@ -24,6 +31,13 @@ trait BlockFilterable
         );
     }
 
+    /**
+     * Alias to scopeWithoutBlockingsOf.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeFilterBlockingsOf($query, $model)
     {
         return $this->scopeWithoutBlockingsOf($query, $model);
