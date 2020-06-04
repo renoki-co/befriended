@@ -17,11 +17,12 @@ trait CanBlock
     {
         $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
 
-        return $this->morphToMany($modelClass, 'blocker', 'blockers', 'blocker_id', 'blockable_id')
-                    ->withPivot('blockable_type')
-                    ->wherePivot('blockable_type', $modelClass)
-                    ->wherePivot('blocker_type', $this->getMorphClass())
-                    ->withTimestamps();
+        return $this
+            ->morphToMany($modelClass, 'blocker', 'blockers', 'blocker_id', 'blockable_id')
+            ->withPivot('blockable_type')
+            ->wherePivot('blockable_type', $modelClass)
+            ->wherePivot('blocker_type', $this->getMorphClass())
+            ->withTimestamps();
     }
 
     /**
@@ -36,7 +37,11 @@ trait CanBlock
             return false;
         }
 
-        return ! is_null($this->blocking((new $model)->getMorphClass())->find($model->getKey()));
+        return ! is_null(
+            $this
+                ->blocking((new $model)->getMorphClass())
+                ->find($model->getKey())
+        );
     }
 
     /**
@@ -89,6 +94,8 @@ trait CanBlock
             return false;
         }
 
-        return (bool) $this->blocking((new $model)->getMorphClass())->detach($model->getKey());
+        return (bool) $this
+            ->blocking((new $model)->getMorphClass())
+            ->detach($model->getKey());
     }
 }
