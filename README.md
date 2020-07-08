@@ -11,6 +11,12 @@ Laravel Befriended
 
 Eloquent Befriended brings social media-like features like following, blocking and filtering content based on following or blocked models
 
+## 🤝 Supporting
+
+Renoki Co. on GitHub aims on brining a lot of open source, MIT-licensed projects and helpful projects to the world. Developing and maintaining projects everyday is a harsh work and tho, we love it.
+
+If you are using your application in your day-to-day job, on presentation demos, hobby projects or even school projects, spread some kind words about our work or sponsor our work. Kind words will touch our chakras and vibe, while the sponsorships will keep the open source projects alive.
+
 ## 🚀 Installation
 
 Install the package:
