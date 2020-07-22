@@ -25,16 +25,16 @@ Install the package:
 $ composer require rennokki/befriended
 ```
 
-Publish the config file & migration files:
+Publish the config:
 
 ```bash
-$ php artisan vendor:publish
+$ php artisan vendor:publish --provider="RenokiCo\Befriended\BefriendedServiceProvider" --tag="config"
 ```
 
-Migrate the database:
+Publish the migrations:
 
 ```bash
-$ php artisan migrate
+$ php artisan vendor:publish --provider="RenokiCo\Befriended\BefriendedServiceProvider" --tag="migrations"
 ```
 
 ## 🙌 Usage
