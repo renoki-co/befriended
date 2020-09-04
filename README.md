@@ -28,13 +28,13 @@ $ composer require rennokki/befriended
 Publish the config:
 
 ```bash
-$ php artisan vendor:publish --provider="RenokiCo\Befriended\BefriendedServiceProvider" --tag="config"
+$ php artisan vendor:publish --provider="Rennokki\Befriended\BefriendedServiceProvider" --tag="config"
 ```
 
 Publish the migrations:
 
 ```bash
-$ php artisan vendor:publish --provider="RenokiCo\Befriended\BefriendedServiceProvider" --tag="migrations"
+$ php artisan vendor:publish --provider="Rennokki\Befriended\BefriendedServiceProvider" --tag="migrations"
 ```
 
 ## 🙌 Usage
