@@ -30,7 +30,8 @@
     ],
     "require": {
         "doctrine/dbal": "^2.10",
-        "laravel/framework": "^6.18.28|^7.22.1|^8.0"
+        "laravel/framework": "^6.18.28|^7.22.1|^8.0",
+        "laravel/legacy-factories": "^1.0"
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",
