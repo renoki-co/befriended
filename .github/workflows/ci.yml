@@ -13,6 +13,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         php: ['7.2', '7.3', '7.4']
@@ -25,21 +26,27 @@ jobs:
             testbench: '5.*'
           - laravel: '8.*'
             testbench: '6.*'
+
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} --${{ matrix.prefer }}
+
     steps:
     - uses: actions/checkout@v1
+
     - uses: actions/cache@v1
       name: Cache dependencies
       with:
         path: ~/.composer/cache/files
         key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
+
     - name: Install dependencies
       run: |
         composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
         composer update --${{ matrix.prefer }} --prefer-dist --no-interaction --no-suggest
+
     - name: Run tests
       run: |
         phpunit --coverage-text --coverage-clover=coverage.xml
+
     - uses: codecov/codecov-action@v1
       with:
         fail_ci_if_error: false
