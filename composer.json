@@ -33,7 +33,7 @@
         "laravel/framework": "^6.0|^7.0|^8.0"
     },
     "require-dev": {
-        "laravel/legacy-factories": "^1.0",
+        "laravel/legacy-factories": "^1.0.4",
         "orchestra/testbench": "^4.0|^5.0|^6.0",
         "orchestra/database": "^4.0|^5.0|^6.0"
     },
