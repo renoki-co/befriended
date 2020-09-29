@@ -4,6 +4,8 @@ namespace Rennokki\Befriended\Traits;
 
 trait CanBeBlocked
 {
+    use HasCustomModelClass;
+
     /**
      * Relationship for models that blocked this model.
      *
@@ -12,7 +14,7 @@ trait CanBeBlocked
      */
     public function blockers($model = null)
     {
-        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+        $modelClass = $this->getModelMorphClass($model);
 
         return $this
             ->morphToMany($modelClass, 'blockable', 'blockers', 'blockable_id', 'blocker_id')

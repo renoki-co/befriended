@@ -7,6 +7,8 @@ use Rennokki\Befriended\Contracts\Liking;
 
 trait CanLike
 {
+    use HasCustomModelClass;
+
     /**
      * Relationship for models that this model is currently liking.
      *
@@ -15,7 +17,7 @@ trait CanLike
      */
     public function liking($model = null)
     {
-        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+        $modelClass = $this->getModelMorphClass($model);
 
         return $this
             ->morphToMany($modelClass, 'liker', 'likers', 'liker_id', 'likeable_id')

@@ -7,6 +7,8 @@ use Rennokki\Befriended\Contracts\Following;
 
 trait CanFollow
 {
+    use HasCustomModelClass;
+
     /**
      * Relationship for models that this model is currently following.
      *
@@ -15,7 +17,7 @@ trait CanFollow
      */
     public function following($model = null)
     {
-        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+        $modelClass = $this->getModelMorphClass($model);
 
         return $this
             ->morphToMany($modelClass, 'follower', 'followers', 'follower_id', 'followable_id')
@@ -116,7 +118,7 @@ trait CanFollow
      */
     public function followRequests($model = null)
     {
-        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+        $modelClass = $this->getModelMorphClass($model);
 
         return $this
             ->morphToMany($modelClass, 'follower', 'followers', 'follower_id', 'followable_id')

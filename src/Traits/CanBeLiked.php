@@ -4,6 +4,8 @@ namespace Rennokki\Befriended\Traits;
 
 trait CanBeLiked
 {
+    use HasCustomModelClass;
+
     /**
      * Relationship for models that liked this model.
      *
@@ -12,7 +14,7 @@ trait CanBeLiked
      */
     public function likers($model = null)
     {
-        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+        $modelClass = $this->getModelMorphClass($model);
 
         return $this
             ->morphToMany($modelClass, 'likeable', 'likers', 'likeable_id', 'liker_id')
