@@ -7,6 +7,8 @@ use Rennokki\Befriended\Contracts\Blocking;
 
 trait CanBlock
 {
+    use HasCustomModelClass;
+
     /**
      * Relationship for models that this model is currently blocking.
      *
@@ -15,7 +17,7 @@ trait CanBlock
      */
     public function blocking($model = null)
     {
-        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+        $modelClass = $this->getModelMorphClass($model);
 
         return $this
             ->morphToMany($modelClass, 'blocker', 'blockers', 'blocker_id', 'blockable_id')

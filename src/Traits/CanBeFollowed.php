@@ -7,6 +7,8 @@ use Rennokki\Befriended\Contracts\Following;
 
 trait CanBeFollowed
 {
+    use HasCustomModelClass;
+
     /**
      * Relationship for models that followed this model.
      *
@@ -15,7 +17,7 @@ trait CanBeFollowed
      */
     public function followers($model = null)
     {
-        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+        $modelClass = $this->getModelMorphClass($model);
 
         return $this
             ->morphToMany($modelClass, 'followable', 'followers', 'followable_id', 'follower_id')
@@ -34,7 +36,7 @@ trait CanBeFollowed
      */
     public function followerRequests($model = null)
     {
-        $modelClass = $model ? (new $model)->getMorphClass() : $this->getMorphClass();
+        $modelClass = $this->getModelMorphClass($model);
 
         return $this
             ->morphToMany($modelClass, 'followable', 'followers', 'followable_id', 'follower_id')
