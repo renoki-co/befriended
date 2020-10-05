@@ -19,7 +19,7 @@
         "blocker"
     ],
     "homepage": "https://github.com/renoki-co/befriended",
-    "license": "MIT",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Alex Renoki",
