@@ -29,7 +29,7 @@
         }
     ],
     "require": {
-        "doctrine/dbal": "^2.10",
+        "doctrine/dbal": "^3.0",
         "laravel/framework": "^7.30|^8.23"
     },
     "require-dev": {
