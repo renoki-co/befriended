@@ -29,8 +29,9 @@
         }
     ],
     "require": {
-        "doctrine/dbal": "^2.10",
-        "laravel/framework": "^7.30|^8.23"
+        "doctrine/dbal": "^2.10|^3.0",
+        "illuminate/database": "^7.30|^8.23",
+        "illuminate/support": "^7.30|^8.23"
     },
     "require-dev": {
         "laravel/legacy-factories": "^1.1",
