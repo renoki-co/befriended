@@ -30,7 +30,7 @@ trait CanBlock
     /**
      * Check if the current model is blocking another model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function isBlocking($model): bool
