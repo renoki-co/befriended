@@ -36,7 +36,7 @@
     "require-dev": {
         "laravel/legacy-factories": "^1.1",
         "mockery/mockery": "^1.4",
-        "orchestra/testbench": "^5.0|^6.0",
+        "orchestra/testbench": "^6.21.1",
         "orchestra/database": "^5.0|^6.0"
     },
     "autoload": {
