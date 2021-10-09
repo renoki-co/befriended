@@ -130,4 +130,26 @@ class FollowTest extends TestCase
         $this->assertEquals(0, $this->page->following(User::class)->count());
         $this->assertEquals(0, $this->page->followers(User::class)->count());
     }
+
+    public function test_revoke_follow()
+    {
+        $this->assertTrue(
+            $this->bob->followRequest($this->alice)
+        );
+
+        $this->assertEquals(1, $this->alice->followerRequests()->count());
+
+        $this->assertTrue(
+            $this->alice->acceptFollowRequest($this->bob)
+        );
+
+        $this->assertTrue($this->bob->follows($this->alice));
+
+        $this->assertTrue(
+            $this->alice->revokeFollower($this->bob)
+        );
+
+        $this->assertFalse($this->bob->follows($this->alice));
+
+    }
 }
