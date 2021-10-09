@@ -9,14 +9,12 @@ use Rennokki\Befriended\Test\TestCase;
 
 class BlockerTest extends TestCase
 {
-
     use RefreshDatabase, WithFaker;
 
     protected $alice;
     protected $bob;
 
-    public function setUp(): void
-    {
+    public function setUp(): void {
         parent::setUp();
         $this->alice = factory(User::class)->create();
         $this->bob = factory(User::class)->create();
@@ -32,6 +30,5 @@ class BlockerTest extends TestCase
 
         $this->assertEquals($this->alice->id, $blocker->blockable->id);
         $this->assertEquals($this->bob->id, $blocker->blocker->id);
-
     }
 }
