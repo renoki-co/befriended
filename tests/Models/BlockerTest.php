@@ -12,7 +12,7 @@ class BlockerTest extends TestCase
 
     use RefreshDatabase, WithFaker;
 
-    protected  $alice;
+    protected $alice;
     protected $bob;
 
     public function setUp() :void
