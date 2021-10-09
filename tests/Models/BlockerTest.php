@@ -15,7 +15,7 @@ class BlockerTest extends TestCase
     protected $alice;
     protected $bob;
 
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
         $this->alice = factory(User::class)->create();
@@ -24,13 +24,14 @@ class BlockerTest extends TestCase
 
     public function testBlockerAndBlockable() {
         $blocker = factory(BlockerModel::class)->create([
-            "blocker_id" => $this->bob->id,
-            "blocker_type" => "Rennokki\Befriended\Test\Models\User",
-            "blockable_id" => $this->alice->id,
+            "blocker_id"     => $this->bob->id,
+            "blocker_type"   => "Rennokki\Befriended\Test\Models\User",
+            "blockable_id"   => $this->alice->id,
             "blockable_type" => "Rennokki\Befriended\Test\Models\User",
         ]);
 
         $this->assertEquals($this->alice->id, $blocker->blockable->id);
         $this->assertEquals($this->bob->id, $blocker->blocker->id);
 
-    }}
+    }
+}
