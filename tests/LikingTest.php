@@ -18,7 +18,7 @@ class LikingTest extends TestCase
 
     protected $simplePage;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

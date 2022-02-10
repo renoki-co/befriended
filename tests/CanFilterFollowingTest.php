@@ -11,7 +11,7 @@ class CanFilterFollowingTest extends TestCase
 
     protected $alice;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
