@@ -30,8 +30,8 @@
     ],
     "require": {
         "doctrine/dbal": "^2.10|^3.3",
-        "illuminate/database": "^8.83|^9.0.1",
-        "illuminate/support": "^8.83|^9.0.1"
+        "illuminate/database": "^8.83|^9.0.1|^10.0.0",
+        "illuminate/support": "^8.83|^9.0.1|^10.0.0"
     },
     "require-dev": {
         "laravel/legacy-factories": "^1.3",
