@@ -34,7 +34,7 @@
         "illuminate/support": "^8.83|^9.0.1"
     },
     "require-dev": {
-        "laravel/legacy-factories": "^1.3",
+        "laravel/legacy-factories": "^1.4",
         "mockery/mockery": "^1.5",
         "orchestra/database": "^6.28|^7.0",
         "orchestra/testbench": "^6.28|^7.0",
